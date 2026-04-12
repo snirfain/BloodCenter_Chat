@@ -1,6 +1,13 @@
 import React from 'react';
 
-export const Header: React.FC = () => {
+export type AppView = 'chat' | 'reference';
+
+interface HeaderProps {
+  activeView: AppView;
+  onViewChange: (view: AppView) => void;
+}
+
+export const Header: React.FC<HeaderProps> = ({ activeView, onViewChange }) => {
   return (
     <header
       className="sticky top-0 z-50 bg-mda-red shadow-md"
@@ -26,8 +33,39 @@ export const Header: React.FC = () => {
           </span>
         </div>
 
+        {/* View switcher */}
+        <nav
+          className="mr-auto flex items-center gap-1 rounded-lg bg-red-900/30 p-0.5"
+          aria-label="מעבר בין מסכים"
+        >
+          <button
+            type="button"
+            onClick={() => onViewChange('chat')}
+            className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
+              activeView === 'chat'
+                ? 'bg-white text-mda-red shadow-sm'
+                : 'text-red-100 hover:bg-white/10'
+            }`}
+            aria-current={activeView === 'chat' ? 'page' : undefined}
+          >
+            בדיקה
+          </button>
+          <button
+            type="button"
+            onClick={() => onViewChange('reference')}
+            className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
+              activeView === 'reference'
+                ? 'bg-white text-mda-red shadow-sm'
+                : 'text-red-100 hover:bg-white/10'
+            }`}
+            aria-current={activeView === 'reference' ? 'page' : undefined}
+          >
+            טבלאות
+          </button>
+        </nav>
+
         {/* Pulse indicator */}
-        <div className="mr-auto flex items-center gap-1.5" aria-hidden="true">
+        <div className="flex items-center gap-1.5 shrink-0" aria-hidden="true">
           <span className="relative flex h-2.5 w-2.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-200 opacity-75" />
             <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white" />

@@ -1,3 +1,5 @@
+import { medicationsFromMdaEligibility } from './medicationEligibilityDerived';
+
 export type MedicationAction =
   | 'זכאות מלאה'
   | 'פסילה קבועה'
@@ -17,7 +19,8 @@ export interface Medication {
   indications: Indication[];
 }
 
-export const medicationsDatabase: Medication[] = [
+/** מאגר ידני (מילוי פערים אם שם לא מופיע בטבלת מד״א) */
+const legacyMedicationsDatabase: Medication[] = [
   // ── אנלגטיקה ──────────────────────────────────────────────────────────────
   {
     name: 'אספירין',
@@ -421,6 +424,15 @@ export const medicationsDatabase: Medication[] = [
       { reason: 'אפילפסיה', action: 'פסילה קבועה' },
     ],
   },
+];
+
+const mdaMedications = medicationsFromMdaEligibility as Medication[];
+const mdaNameSet = new Set(mdaMedications.map((m) => m.name));
+
+/** טבלת מד״א (מ־scripts/medication_eligibility.tsv) + רשומות legacy לשמות שלא בטבלה */
+export const medicationsDatabase: Medication[] = [
+  ...mdaMedications,
+  ...legacyMedicationsDatabase.filter((m) => !mdaNameSet.has(m.name)),
 ];
 
 // ─── Helper: fuzzy search ────────────────────────────────────────────────────
