@@ -1,0 +1,1442 @@
+[
+  {
+    "id": "country-travel-001",
+    "nameHe": "אוגנדה",
+    "nameEn": "Uganda",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-002",
+    "nameHe": "איי הבתולה הבריטיים",
+    "nameEn": "British Virgin Islands",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-003",
+    "nameHe": "איי הבתולה של ארצות הברית",
+    "nameEn": "U.S. Virgin Islands",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-004",
+    "nameHe": "איי טרקס וקייקוס",
+    "nameEn": "Turks and Caicos Islands",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-005",
+    "nameHe": "איי מרשל",
+    "nameEn": "Marshall Islands",
+    "topic": "נגיפים טרופיים",
+    "criteria": "נגיפים טרופיים: ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-006",
+    "nameHe": "איי קוק",
+    "nameEn": "Cook Islands",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-007",
+    "nameHe": "איי קיימאן",
+    "nameEn": "Cayman Islands",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-008",
+    "nameHe": "איי שלמה",
+    "nameEn": "Solomon Islands",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-009",
+    "nameHe": "אינדונזיה",
+    "nameEn": "Indonesia",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-010",
+    "nameHe": "אינדונזיה",
+    "nameEn": "Indonesia",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים, עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "כל האזורים של אינדונזיה המזרחית(פרובינציות Maluku, North Maluku, East Nusa Tenggara, Papua, ומערב Papua), כולל העיר Labuan Bajo ואיי Komodo באזור Nusa Tengarra. אזורים כפריים ב Kalimantan (Borneo), West Nusa Tenggara (כולל האיים של Lombok), Sulawesi, and Sumatra. סיכון נמוך באזורים כפריים של Java כולל Pangandaran, Sukabumi, and Ujung Kulong. אין סיכון בערים Jakarta ו Ubud אזורי נופש ב Bali ו- Java, האיים Gili Islands ו- Thousand Islands (Pulau Seribu)."
+  },
+  {
+    "id": "country-travel-011",
+    "nameHe": "אירן",
+    "nameEn": "Iran",
+    "topic": "נגיף קורונה (MERS)",
+    "criteria": "ביקור - דחייה לשבועיים",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-012",
+    "nameHe": "אל סלבדור",
+    "nameEn": "El Salvador",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-013",
+    "nameHe": "אנגווילה",
+    "nameEn": "Anguilla",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-014",
+    "nameHe": "אנגולה",
+    "nameEn": "Angola",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-015",
+    "nameHe": "אנטיגואה וברבודה",
+    "nameEn": "Antigua and Barbuda",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-016",
+    "nameHe": "אפגניסטן",
+    "nameEn": "Afghanistan",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים, עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "מאפריל עד דצמבר באזורים נמוכים מ- 2500m"
+  },
+  {
+    "id": "country-travel-017",
+    "nameHe": "אקוודור",
+    "nameEn": "Ecuador",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-018",
+    "nameHe": "אקוודור",
+    "nameEn": "Ecuador",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "סיכון בכל האזורים הנמוכים מ 1500m בפרובינציות: Cotopaxi, Esmeraldas, Morona Santiago, Orellana, Pastaza, and Sucumbios. אין סיכון בערים Guayaquil and Quito ו- Galápagos Islands."
+  },
+  {
+    "id": "country-travel-019",
+    "nameHe": "ארגנטינה",
+    "nameEn": "Argentine",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-020",
+    "nameHe": "ארובה",
+    "nameEn": "Aruba",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-021",
+    "nameHe": "אריתריאה",
+    "nameEn": "Eritrea",
+    "topic": "איידס",
+    "criteria": "ביקור/שהייה - דחייה ל-3 חודשים",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-022",
+    "nameHe": "אריתריאה",
+    "nameEn": "Eritrea",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "אין סיכון ב Asmara."
+  },
+  {
+    "id": "country-travel-023",
+    "nameHe": "אתיופיה",
+    "nameEn": "Ethiopia",
+    "topic": "איידס",
+    "criteria": "ביקור/שהייה - דחייה ל-3 חודשים",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-024",
+    "nameHe": "אתיופיה",
+    "nameEn": "Ethiopia",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "סיכון בכל האזורים הנמוכים מ-2500 מ' (כולל אדיס-אבבה)."
+  },
+  {
+    "id": "country-travel-025",
+    "nameHe": "באהמס",
+    "nameEn": "Bahamas",
+    "topic": "איידס",
+    "criteria": "ביקור/שהייה - דחייה ל-3 חודשים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-026",
+    "nameHe": "בהוטאן",
+    "nameEn": "Bhutan",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-027",
+    "nameHe": "בוליביה",
+    "nameEn": "Bolivia",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-028",
+    "nameHe": "בוליביה",
+    "nameEn": "Bolivia",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "כל האזורים נמוכים מ- 2500m .אין סיכון בעיר La Paz"
+  },
+  {
+    "id": "country-travel-029",
+    "nameHe": "בונייר",
+    "nameEn": "Bonaire",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-030",
+    "nameHe": "בוצואנה",
+    "nameEn": "Botswana",
+    "topic": "איידס",
+    "criteria": "ביקור/שהייה - דחייה ל-3 חודשים",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-031",
+    "nameHe": "בוצואנה",
+    "nameEn": "Botswana",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "סיכון במחוזות/תתי מחוזות של Bobirwa, Boteti, Chobe (כולל Chobe National Park), Ghanzi, Mahalapaye, Ngamiland (Ngami), Northeast (כולל Francistown), Okavango, Serowe Palapye and Tutume אין סיכון ב Gaborone."
+  },
+  {
+    "id": "country-travel-032",
+    "nameHe": "בורונדי",
+    "nameEn": "Burundi",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-033",
+    "nameHe": "בורקינה פאסו",
+    "nameEn": "Burkina Faso",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-034",
+    "nameHe": "בחריין",
+    "nameEn": "Bahrain",
+    "topic": "נגיף קורונה (MERS)",
+    "criteria": "ביקור - דחייה לשבועיים",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-035",
+    "nameHe": "בליז",
+    "nameEn": "Belize",
+    "topic": "איידס",
+    "criteria": "ביקור/שהייה - דחייה ל-3 חודשים",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-036",
+    "nameHe": "בליז",
+    "nameEn": "Belize",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "אין סיכון ב- Belize City ואזורים תיירותיים באיים."
+  },
+  {
+    "id": "country-travel-037",
+    "nameHe": "בנגלדש",
+    "nameEn": "Bangladesh",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-038",
+    "nameHe": "בנגלדש",
+    "nameEn": "Bangladesh",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "סיכון במחוזות Chittagong Hill Tract (Bandarban, Rangamati, ו- Khagrachari); ומחוזות של Chattogram (Chittagong), Cox’s Bazar, Habiganj, Kurigram, Moulvibazar, Mymensingh, Netrakona, Sherpur, Sunamganj, ו- Sylhet. אין סיכון בעיר Dhaka."
+  },
+  {
+    "id": "country-travel-039",
+    "nameHe": "בנין",
+    "nameEn": "Benin",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-040",
+    "nameHe": "ברבדוס",
+    "nameEn": "Barbados",
+    "topic": "איידס",
+    "criteria": "ביקור /שהייה - דחייה ל-3 חודשים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-041",
+    "nameHe": "ברוניי דארוסלאם",
+    "nameEn": "Brunei Darussalam",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-042",
+    "nameHe": "ברזיל",
+    "nameEn": "Brazil",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-043",
+    "nameHe": "ברזיל",
+    "nameEn": "Brazil",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "סיכון בכל האזורים במדינות: Acre, Amapa, Amazonas, Rondonia, Roraima, Maranhão, Mato Grosso, ו- Para. אין סיכון בערים: Brasilia, Rio de Janeiro, São Paulo, São Luis, Cuiabá, Belém וב- Iguaçu Falls."
+  },
+  {
+    "id": "country-travel-044",
+    "nameHe": "גאנה",
+    "nameEn": "Ghana",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-045",
+    "nameHe": "גבון",
+    "nameEn": "Gabon",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-046",
+    "nameHe": "גואדלופ",
+    "nameEn": "Guadeloupe",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-047",
+    "nameHe": "גואטמלה",
+    "nameEn": "Guatemala",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-048",
+    "nameHe": "גואטמלה",
+    "nameEn": "Guatemala",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים, עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "סיכון בפרובינציות של Alta Verapaz, Baja Verapaz, Escuintla, Izabal, and Petén. אין סיכון ב Antigua, Guatemala City, or Lake Atitlan."
+  },
+  {
+    "id": "country-travel-049",
+    "nameHe": "גויאנה (גיאנה)",
+    "nameEn": "Guyana",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-050",
+    "nameHe": "גיאנה הצרפתית",
+    "nameEn": "French Guiana",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-051",
+    "nameHe": "גיאנה הצרפתית",
+    "nameEn": "French Guiana",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "אין סיכון בחוף Kourou ועיר Cayenne"
+  },
+  {
+    "id": "country-travel-052",
+    "nameHe": "ג'יבוטי",
+    "nameEn": "Djibouti",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-053",
+    "nameHe": "גינאה",
+    "nameEn": "Guinea",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-054",
+    "nameHe": "גינאה המשוונית",
+    "nameEn": "Equatorial Guinea",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-055",
+    "nameHe": "גינאה-ביסאו",
+    "nameEn": "Guinea Bissau",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-056",
+    "nameHe": "גמבייה",
+    "nameEn": "Gambia",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-057",
+    "nameHe": "ג'מייקה",
+    "nameEn": "Jamaica",
+    "topic": "איידס",
+    "criteria": "ביקור/שהייה - דחייה ל-3 חודשים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-058",
+    "nameHe": "גרנדה",
+    "nameEn": "Grenada",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-059",
+    "nameHe": "דומיניקה",
+    "nameEn": "Dominica",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-060",
+    "nameHe": "דרום אפריקה",
+    "nameEn": "South-Africa",
+    "topic": "איידס",
+    "criteria": "ביקור/שהייה - דחייה ל-3 חודשים",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-061",
+    "nameHe": "דרום אפריקה",
+    "nameEn": "South-Africa",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "סיכון לאורך הגבול עם זימבבואה ומוזמביק, במיוחד ב: מחוזות Mopani and Vhembe בפרובינציית Limpopo, מחוז Ehlanzeni בפרובינציית Mpumalanga, מחוז Umknanyakude בפרובינציית Kwazulu-Natal והפארק הלאומי ב Kruger."
+  },
+  {
+    "id": "country-travel-062",
+    "nameHe": "דרום סודן",
+    "nameEn": "South Sudan",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-063",
+    "nameHe": "האיטי",
+    "nameEn": "Haiti",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-064",
+    "nameHe": "האיים המלדיביים",
+    "nameEn": "Republic of Maldives",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-065",
+    "nameHe": "הודו",
+    "nameEn": "India",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-066",
+    "nameHe": "הונדורס",
+    "nameEn": "Honduras",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-067",
+    "nameHe": "הונדורס",
+    "nameEn": "Honduras",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "אין סיכון ב: San Pedro Sula ו-Tegucigalpa בלבד."
+  },
+  {
+    "id": "country-travel-068",
+    "nameHe": "הרפובליקה הדומיניקנית",
+    "nameEn": "Dominican Republic",
+    "topic": "איידס",
+    "criteria": "ביקור/שהייה - דחייה ל-3 חודשים",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-069",
+    "nameHe": "הרפובליקה הדומיניקנית",
+    "nameEn": "Dominican Republic",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-070",
+    "nameHe": "הרפובליקה הדמוקרטית של קונגו (קונגו-קינשאסה)",
+    "nameEn": "Democratic Republic of the Congo( Congo-Kinshasa)",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-071",
+    "nameHe": "הרפובליקה המרכז אפריקאית",
+    "nameEn": "Central African Republic",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-072",
+    "nameHe": "הרפובליקה של קונגו (קונגו- ברזוויל)",
+    "nameEn": "Congo",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-073",
+    "nameHe": "ואנואטו",
+    "nameEn": "Vanuatu",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-074",
+    "nameHe": "וייטנאם",
+    "nameEn": "Vietnam",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-075",
+    "nameHe": "וייטנאם",
+    "nameEn": "Vietnam",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "סיכון באזורים כפריים. אין סיכון בערים: Da Nang, Haiphong, Hanoi, Ho Shi Minh City, Nha Trang, Qui Nho."
+  },
+  {
+    "id": "country-travel-076",
+    "nameHe": "ונצואלה",
+    "nameEn": "Venezuela",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים עפ\"י אזורים.",
+    "remarks": "כל האזורים הנמוכים מ 1700 מ' ומפלי אנג'ל (Angel Falls)"
+  },
+  {
+    "id": "country-travel-077",
+    "nameHe": "זימבבואה",
+    "nameEn": "Zimbabwe (Rhodesia)",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-078",
+    "nameHe": "זמביה",
+    "nameEn": "Zambia",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-079",
+    "nameHe": "חוף השנהב",
+    "nameEn": "Ivory Coast",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-080",
+    "nameHe": "טוגו",
+    "nameEn": "Togo",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-081",
+    "nameHe": "טונגה",
+    "nameEn": "Tonga",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-082",
+    "nameHe": "טוקלאו",
+    "nameEn": "Tokelau",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-083",
+    "nameHe": "טיוואן",
+    "nameEn": "Taiwan",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-084",
+    "nameHe": "טנזניה (כולל זנזיבר)",
+    "nameEn": "Tanzania",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-085",
+    "nameHe": "טרינידד",
+    "nameEn": "Trinidad and Tobago",
+    "topic": "איידס",
+    "criteria": "ביקור/שהייה - דחייה ל-3 חודשים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-086",
+    "nameHe": "ירדן",
+    "nameEn": "Jordan",
+    "topic": "נגיף קורונה (MERS)",
+    "criteria": "ביקור - דחייה לשבועיים",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-087",
+    "nameHe": "כווית",
+    "nameEn": "Kuwait",
+    "topic": "נגיף קורונה (MERS)",
+    "criteria": "ביקור - דחייה לשבועיים",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-088",
+    "nameHe": "כף ורדה",
+    "nameEn": "Cape Verde Islands",
+    "topic": "איידס",
+    "criteria": "ביקור/שהייה - דחייה ל-3 חודשים",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-089",
+    "nameHe": "לאוס",
+    "nameEn": "Laos",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-090",
+    "nameHe": "לאוס",
+    "nameEn": "Laos",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "סיכון בחלקים הדרומיים של המדינה, בפרובנציות של Attapeu, Champasak, Khammouane, Salavan, Savannakhet, ו- Sekong. מקרים בודדים בחלק הצפוני של המדינה. אין סיכון ב-Luang Prabang ו- Vientiane."
+  },
+  {
+    "id": "country-travel-091",
+    "nameHe": "לבנון",
+    "nameEn": "Lebanon",
+    "topic": "נגיף קורונה (MERS)",
+    "criteria": "ביקור - דחייה לשבועיים",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-092",
+    "nameHe": "ליבריה",
+    "nameEn": "Liberia",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-093",
+    "nameHe": "לסוטו",
+    "nameEn": "Lesotho",
+    "topic": "איידס",
+    "criteria": "ביקור/שהייה - דחייה ל-3 חודשים",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-094",
+    "nameHe": "מאוריטניה",
+    "nameEn": "Mauritania",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים. עפ\"י אזורים.",
+    "remarks": "אין סיכון ב Dakhlet-Nouadhibou ו- Tiris-Zemour בצפון."
+  },
+  {
+    "id": "country-travel-095",
+    "nameHe": "מאוריציוס",
+    "nameEn": "Mauritius",
+    "topic": "איידס",
+    "criteria": "ביקור/שהייה - דחייה ל-3 חודשים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-096",
+    "nameHe": "מאלווי",
+    "nameEn": "Malawi",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-097",
+    "nameHe": "מאלי",
+    "nameEn": "Mali",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-098",
+    "nameHe": "מדגסקר",
+    "nameEn": "Madagascar",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים עפ\"י אזורים.",
+    "remarks": "אין סיכון בעיר הבירה Antananarivo."
+  },
+  {
+    "id": "country-travel-099",
+    "nameHe": "מדיירה",
+    "nameEn": "Madeira",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-100",
+    "nameHe": "מוזמביק",
+    "nameEn": "Mozambique",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-101",
+    "nameHe": "מונסראט",
+    "nameEn": "Montserrat",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-102",
+    "nameHe": "מזרח טימור",
+    "nameEn": "East Timor",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-103",
+    "nameHe": "מיוט",
+    "nameEn": "Mayotte",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-104",
+    "nameHe": "מינאמר (בורמה)",
+    "nameEn": "Myanmar",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-105",
+    "nameHe": "מיקרונזיה",
+    "nameEn": "Micronesia",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-106",
+    "nameHe": "מלזיה",
+    "nameEn": "Malaysia",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-107",
+    "nameHe": "מלזיה",
+    "nameEn": "Malaysia",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "סיכון באזורים כפריים ומיוערים."
+  },
+  {
+    "id": "country-travel-108",
+    "nameHe": "מקסיקו",
+    "nameEn": "Mexico",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-109",
+    "nameHe": "מקסיקו",
+    "nameEn": "Mexico",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "סיכון ב Campeche, Chiapas ובחלק הדרומי של Chihuahua. אין סיכון לאורך גבול ארה\"ב-מקסיקו."
+  },
+  {
+    "id": "country-travel-110",
+    "nameHe": "מרטיניק",
+    "nameEn": "Martinique",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-111",
+    "nameHe": "ניג'ר",
+    "nameEn": "Niger",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-112",
+    "nameHe": "ניגריה",
+    "nameEn": "Nigeria",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-113",
+    "nameHe": "ניקרגואה",
+    "nameEn": "Nicaragua",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-114",
+    "nameHe": "ניקרגואה",
+    "nameEn": "Nicaragua",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "סיכון ב Región Autónoma Atlántico Norte (RAAN) ו- Región Autónoma Atlántico Sur (RAAS). אין סיכון בעיר Managua."
+  },
+  {
+    "id": "country-travel-115",
+    "nameHe": "נמיביה",
+    "nameEn": "Namibia",
+    "topic": "איידס",
+    "criteria": "ביקור/שהייה - דחייה ל-3 חודשים",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-116",
+    "nameHe": "נמיביה",
+    "nameEn": "Namibia",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "סיכון באזורים Kavango (מזרח ומערב), Kunene, Ohangwena, Omaheke, Omusati, Oshana, Oshikoto, Otjozunjupa, and Zambezi. אין סיכון בעיר Windhoek."
+  },
+  {
+    "id": "country-travel-117",
+    "nameHe": "נפאל",
+    "nameEn": "Nepal",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-118",
+    "nameHe": "נפאל",
+    "nameEn": "Nepal",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "סיכון בפרובנציות Sudurpashchim ו- Karnali באזורים מתחת ל 2000m. אין סיכון בעיר Kathmandu, Pokhara ובמסלולי טרקים טיפוסיים באזור ההימליה."
+  },
+  {
+    "id": "country-travel-119",
+    "nameHe": "סאבא",
+    "nameEn": "Saba",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-120",
+    "nameHe": "סאו טומה ופרינסיפה",
+    "nameEn": "Sao Tome and Principe",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-121",
+    "nameHe": "סודן",
+    "nameEn": "Sudan",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-122",
+    "nameHe": "סווזילנד",
+    "nameEn": "Swaziland",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים. עפ\"י אזורים.",
+    "remarks": "סיכון באזורים מזרחיים הגובלים במוזמביק ובדרום אפריקה, כולל כל מחוז Lubombo והחצי המזרחי של המחוזות Hhohho, Manzini, ו- Shiselweni."
+  },
+  {
+    "id": "country-travel-123",
+    "nameHe": "סומליה",
+    "nameEn": "Somalia",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-124",
+    "nameHe": "סורינאם",
+    "nameEn": "Suriname",
+    "topic": "איידס",
+    "criteria": "ביקור/שהייה - דחייה ל-12 חודשים",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-125",
+    "nameHe": "סורינאם",
+    "nameEn": "Suriname",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "סיכון עיקרי בפרובינציות Sipaliwini, קרוב לגבול גיאנה הצרפתית."
+  },
+  {
+    "id": "country-travel-126",
+    "nameHe": "סיירה לאונה",
+    "nameEn": "Sierra Leone",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-127",
+    "nameHe": "סיישל",
+    "nameEn": "Seychelles",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-128",
+    "nameHe": "סין",
+    "nameEn": "China",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-129",
+    "nameHe": "סינגפור",
+    "nameEn": "Singapore",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-130",
+    "nameHe": "סמואה",
+    "nameEn": "Samoa",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-131",
+    "nameHe": "סמואה האמריקאית",
+    "nameEn": "American Samoa",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-132",
+    "nameHe": "סן ברתלמי",
+    "nameEn": "Saint Barthelemy",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-133",
+    "nameHe": "סן מרטן",
+    "nameEn": "Saint Martin",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-134",
+    "nameHe": "סנגל",
+    "nameEn": "Senegal",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-135",
+    "nameHe": "סנט אוסטטיוס",
+    "nameEn": "Sint Eustatius",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-136",
+    "nameHe": "סנט וינ.וגרנדין",
+    "nameEn": "Saint Vincent and the Grenadines",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-137",
+    "nameHe": "סנט מארטן",
+    "nameEn": "Sint Maarten",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-138",
+    "nameHe": "סנט קיטס ונוויס",
+    "nameEn": "Saint Kitts & Nevis",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-139",
+    "nameHe": "סנטה לוצ'יה",
+    "nameEn": "Saint Lucia",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-140",
+    "nameHe": "סרי לנקה",
+    "nameEn": "Sri Lanka",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-141",
+    "nameHe": "עומאן",
+    "nameEn": "Oman",
+    "topic": "נגיף קורונה (MERS)",
+    "criteria": "ביקור - דחייה לשבועיים",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-142",
+    "nameHe": "ערב הסעודית",
+    "nameEn": "Saudi Arabia",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-143",
+    "nameHe": "ערב הסעודית",
+    "nameEn": "Saudi Arabia",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "סיכון בפרובינציות: Asir, Jizan. אין סיכון בערים- Jeddah, Mecca, Medina, Taif, Riyadh."
+  },
+  {
+    "id": "country-travel-144",
+    "nameHe": "פאלאו",
+    "nameEn": "Palau",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-145",
+    "nameHe": "פולינזיה צרפתית",
+    "nameEn": "French Polynesia",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-146",
+    "nameHe": "פורטוריקו",
+    "nameEn": "Puerto Rico",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-147",
+    "nameHe": "פיג'י",
+    "nameEn": "Fiji",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-148",
+    "nameHe": "פיליפינים",
+    "nameEn": "Philippines",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-149",
+    "nameHe": "פיליפינים",
+    "nameEn": "Philippines",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "סיכון באיי Palawan ו- Mindanao. אין סיכון במטרופולין של Manila ואזורים עירוניים אחרים."
+  },
+  {
+    "id": "country-travel-150",
+    "nameHe": "פנמה",
+    "nameEn": "Panama",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-151",
+    "nameHe": "פנמה",
+    "nameEn": "Panama",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "סיכון בפרובינציות: Bocas del Toro, Chiriquí, Colón, Darién, Panamá, Panamá Oeste, Veraguas, Emberá, Kuna Yala , Ngäbe-Buglé אין סיכון באזור תעלת פנמה, ו- Panama City."
+  },
+  {
+    "id": "country-travel-152",
+    "nameHe": "פפואה ניו-גינאה",
+    "nameEn": "Papua New Guinea",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים עפ\"י אזורים.",
+    "remarks": "סיכון בכל האזורים הנמוכים מ-2000 מ'."
+  },
+  {
+    "id": "country-travel-153",
+    "nameHe": "פקיסטן",
+    "nameEn": "Pakistan",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים עפ\"י אזורים.",
+    "remarks": "סיכון באזורים נמוכים מ- 2500 מ'."
+  },
+  {
+    "id": "country-travel-154",
+    "nameHe": "פרגואי",
+    "nameEn": "Paraguay",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-155",
+    "nameHe": "פרו",
+    "nameEn": "Peru",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-156",
+    "nameHe": "פרו",
+    "nameEn": "Peru",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "סיכון באזורים נמוכים מ 2500m, מזרחית ל-Andes כולל Iquitos ו- Puerto Maldonado אין סיכון באזורים הבאים: פרובינציית Lima, הערים Arequipa, Ica, Moquegua, Nazca, Puno, ו- Tacna, אזורי הרמה התיירותיים (Cuzco, Machu Picchu, ואגם Titicaca) ולאורך חוף האוקיינוס השקט."
+  },
+  {
+    "id": "country-travel-157",
+    "nameHe": "צ'אד",
+    "nameEn": "Chad",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-158",
+    "nameHe": "קובה",
+    "nameEn": "Cuba",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-159",
+    "nameHe": "קולומביה",
+    "nameEn": "Colombia",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-160",
+    "nameHe": "קולומביה",
+    "nameEn": "Colombia",
+    "topic": "מלריה",
+    "criteria": "מלריה: ביקור - דחייה ל 12 חודשים עפ\"\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "סיכון בכל האזורים נמוכים מ 1700m. אין סיכון ב Bogota ו- Cartagena ו Medellin."
+  },
+  {
+    "id": "country-travel-161",
+    "nameHe": "קומורו",
+    "nameEn": "Comoros",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-162",
+    "nameHe": "קוסטה ריקה",
+    "nameEn": "Costa Rica",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-163",
+    "nameHe": "קוסטה ריקה",
+    "nameEn": "Costa Rica",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים, עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "סיכון בפרובינציות: Alajuela ו- Limon."
+  },
+  {
+    "id": "country-travel-164",
+    "nameHe": "קוסראה",
+    "nameEn": "Kosrae",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-165",
+    "nameHe": "קוראסאו",
+    "nameEn": "Curacao",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-166",
+    "nameHe": "קוריאה הדרומית",
+    "nameEn": "South Korea",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים, עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "סיכון במרץ-דצמבר באזורים כפריים בחלקים הצפוניים של הפרובינציות Incheon, Kangwon , Kyônggi כולל האזור המפורז(DMZ)."
+  },
+  {
+    "id": "country-travel-167",
+    "nameHe": "קוריאה הצפונית",
+    "nameEn": "North Korea",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים, עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "סיכון בפרובינציות הדרומיות"
+  },
+  {
+    "id": "country-travel-168",
+    "nameHe": "קטר",
+    "nameEn": "Qatar",
+    "topic": "נגיף קורונה (MERS)",
+    "criteria": "ביקור - דחייה לשבועיים",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-169",
+    "nameHe": "קיריבאטי",
+    "nameEn": "Kiribati",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-170",
+    "nameHe": "קלדוניה החדשה",
+    "nameEn": "New Caledonia",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-171",
+    "nameHe": "קמבודיה",
+    "nameEn": "Cambodia",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-172",
+    "nameHe": "קמבודיה",
+    "nameEn": "Cambodia",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים, עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "אין סיכון בערים Phnom Penh ו- Siem Reap ובמתחם המקדש המרכזי ב- Angkor Wat."
+  },
+  {
+    "id": "country-travel-173",
+    "nameHe": "קמרון",
+    "nameEn": "Cameroon",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-174",
+    "nameHe": "קניה",
+    "nameEn": "Kenya",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים עפ\"י אזורים.",
+    "remarks": "סיכון בכל האזורים הנמוכים מ-2500 מ'. מקרים בודדים בעיר הבירה ניירובי."
+  },
+  {
+    "id": "country-travel-175",
+    "nameHe": "ראוניון",
+    "nameEn": "Reunion",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-176",
+    "nameHe": "רואנדה",
+    "nameEn": "Rwanda",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים. שהייה מעל 6 חודשים - דחייה ל 3 שנים.",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-177",
+    "nameHe": "תאילנד",
+    "nameEn": "Thailand",
+    "topic": "איידס",
+    "criteria": "ביקור/שהייה - דחייה ל-3 חודשים",
+    "remarks": ""
+  },
+  {
+    "id": "country-travel-178",
+    "nameHe": "תאילנד",
+    "nameEn": "Thailand",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים, עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "סיכון בפרובינציות הגובלות ב Burma , Cambodia (אין סיכון ב Buri Ram) ו-Malaysia (במיוחד באזורים כפריים מיוערים). אין סיכון בערים Bangkok, Chiang Mai, Chiang Rai ו-Pattaya ובאיים Koh Phangan, Koh Samui, Phuket ובפרובינציית האי Krabi (Koh Phi Phi, Koh Yao Noi, Koh Yao Yai, ו- Ko Lanta)."
+  },
+  {
+    "id": "country-travel-179",
+    "nameHe": "תימן",
+    "nameEn": "Yemen",
+    "topic": "נגיפים טרופיים",
+    "criteria": "ביקור - דחייה ל 4 שבועות",
+    "remarks": "כגון: נגיפים זיקה, דנגה, צ'יקונגוניה"
+  },
+  {
+    "id": "country-travel-180",
+    "nameHe": "תימן",
+    "nameEn": "Yemen",
+    "topic": "מלריה",
+    "criteria": "ביקור - דחייה ל 12 חודשים, עפ\"י אזורים. שהייה מעל 6 חודשים - דחייה ל 3 שנים, עפ\"י אזורים.",
+    "remarks": "סיכון בכל האזורים נמוכים מ 2000m . אין סיכון ב- Sana'a."
+  }
+]

@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import type { ChatMessage, FlowStep, SessionAnswers, FinalStatus, Issue, IssueType } from '../types/chat';
-import { searchMedication, type Medication } from '../data/medications';
+import { searchMedication, type Indication, type Medication } from '../data/medications';
 import { searchCountry } from '../data/countries';
 import { createUser, createSession, updateSession, saveRating } from '../services/db';
 
@@ -21,6 +21,15 @@ function overallStatus(issues: Issue[]): FinalStatus {
   if (issues.length === 0) return 'זכאות מלאה';
   const worst = issues.reduce((a, b) => (SEVERITY[a.type] >= SEVERITY[b.type] ? a : b));
   return worst.type;
+}
+
+/** זכאות מלאה עם המתנה (למשל קולכיצין) — לא מציגים «ללא מגבלה». */
+function botMessageForFullEligibility(medName: string, ind: Indication): string {
+  const w = ind.waitTime?.trim();
+  if (w) {
+    return `✓ ${medName} — מותר להתרים רק לאחר ${w}. נמשיך.`;
+  }
+  return `✓ ${medName} — ללא מגבלה. נמשיך.`;
 }
 
 // ─── Input parsers ────────────────────────────────────────────────────────────
@@ -302,8 +311,10 @@ export function useChatFlow() {
         } else if (ind.action === 'בירור רפואי') {
           addIssue({ type: 'בירור רפואי', reason: `תרופה: ${med.name} — ${ind.reason}` });
           await addBotMessage(`נרשם (${med.name}). נמשיך.`, BOT_DELAY_SHORT);
+        } else if (ind.action === 'זכאות מלאה') {
+          await addBotMessage(botMessageForFullEligibility(med.name, ind), BOT_DELAY_SHORT);
         } else {
-          await addBotMessage(`✓ ${med.name} — ללא מגבלה. נמשיך.`, BOT_DELAY_SHORT);
+          await addBotMessage(`נרשם (${med.name}). נמשיך.`, BOT_DELAY_SHORT);
         }
 
         await processNextMedication(updatedAnswers);
@@ -515,8 +526,10 @@ export function useChatFlow() {
           } else if (indication.action === 'בירור רפואי') {
             addIssue({ type: 'בירור רפואי', reason: `תרופה: ${pendingMedication.name} — ${indication.reason}` });
             await addBotMessage('נרשם. נמשיך.', BOT_DELAY_SHORT);
+          } else if (indication.action === 'זכאות מלאה') {
+            await addBotMessage(botMessageForFullEligibility(pendingMedication.name, indication), BOT_DELAY_SHORT);
           } else {
-            await addBotMessage(`✓ ${pendingMedication.name} — ללא מגבלה. נמשיך.`, BOT_DELAY_SHORT);
+            await addBotMessage('נרשם. נמשיך.', BOT_DELAY_SHORT);
           }
           setPendingMedication(null);
           // Advance the medication queue
@@ -632,8 +645,10 @@ export function useChatFlow() {
               addIssue({ type: 'פסילה זמנית', reason: `תרופה: ${med.name}`, waitTime: ind.waitTime });
             } else if (ind.action === 'בירור רפואי') {
               addIssue({ type: 'בירור רפואי', reason: `תרופה: ${med.name} — ${ind.reason}` });
+            } else if (ind.action === 'זכאות מלאה') {
+              await addBotMessage(botMessageForFullEligibility(med.name, ind), BOT_DELAY_SHORT);
             } else {
-              await addBotMessage(`✓ ${med.name} — ללא מגבלה. נמשיך.`, BOT_DELAY_SHORT);
+              await addBotMessage(`נרשם (${med.name}). נמשיך.`, BOT_DELAY_SHORT);
             }
             if (ind.action !== 'זכאות מלאה') {
               await addBotMessage(`נרשם (${med.name}). נמשיך.`, BOT_DELAY_SHORT);

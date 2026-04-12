@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Generates src/data/receivingBloodCriteriaTable.ts from inline row tuples."""
+"""Builds scripts/reference-tables/receiving_blood_criteria.json from inline tuples + part2 TSV."""
 import csv
 import json
 from pathlib import Path
@@ -137,50 +137,22 @@ ROWS = ROWS + load_part2_tsv()
 
 def main() -> None:
     root = Path(__file__).resolve().parents[1]
-    out = root / "src" / "data" / "receivingBloodCriteriaTable.ts"
-    lines = [
-        "/**",
-        " * טבלת קריטריונים לקבלת תורם דם — חלק א׳ בקוד, חלק ב׳ ב-receiving_criteria_part2.tsv.",
-        " * מקור רשמי: https://www.mdais.org/blood-donation/criteria-receiving-blood",
-        " */",
-        "",
-        "export type ReceivingBloodCriterionRow = {",
-        "  id: string;",
-        "  subjectHe: string;",
-        "  subjectEn: string;",
-        "  criteria: string;",
-        "  remarks: string;",
-        "};",
-        "",
-        "export const RECEIVING_BLOOD_CRITERIA_ROWS: ReceivingBloodCriterionRow[] = [",
-    ]
+    ref_dir = root / "scripts" / "reference-tables"
+    out_json = ref_dir / "receiving_blood_criteria.json"
+    ref_dir.mkdir(parents=True, exist_ok=True)
+    rows_json: list[dict[str, str]] = []
     for i, (he, en, c, r) in enumerate(ROWS):
-        row = {
-            "id": f"criterion-{i + 1:03d}",
-            "subjectHe": he,
-            "subjectEn": en,
-            "criteria": c,
-            "remarks": r,
-        }
-        lines.append(f"  {json.dumps(row, ensure_ascii=False)},")
-    lines.append("];")
-    lines.append("")
-    lines.append("export function findReceivingBloodCriteria(query: string, maxResults = 30): ReceivingBloodCriterionRow[] {")
-    lines.append("  const q = query.trim().toLowerCase();")
-    lines.append("  if (!q) return [];")
-    lines.append("  const out: ReceivingBloodCriterionRow[] = [];")
-    lines.append("  for (const row of RECEIVING_BLOOD_CRITERIA_ROWS) {")
-    lines.append("    const hay = `${row.subjectHe} ${row.subjectEn} ${row.criteria} ${row.remarks}`.toLowerCase();")
-    lines.append("    if (hay.includes(q)) {")
-    lines.append("      out.push(row);")
-    lines.append("      if (out.length >= maxResults) break;")
-    lines.append("    }")
-    lines.append("  }")
-    lines.append("  return out;")
-    lines.append("}")
-    lines.append("")
-    out.write_text("\n".join(lines), encoding="utf-8")
-    print(f"Wrote {len(ROWS)} rows -> {out}")
+        rows_json.append(
+            {
+                "id": f"criterion-{i + 1:03d}",
+                "subjectHe": he,
+                "subjectEn": en,
+                "criteria": c,
+                "remarks": r,
+            }
+        )
+    out_json.write_text(json.dumps(rows_json, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"Wrote {len(rows_json)} rows (JSON, not bundled) -> {out_json}")
 
 
 if __name__ == "__main__":
