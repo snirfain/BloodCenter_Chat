@@ -44,6 +44,8 @@ export async function updateSession(
   data: {
     answers_log?: Record<string, unknown>;
     final_status?: string;
+    rating?: number | null;
+    feedback_text?: string | null;
   },
 ): Promise<void> {
   const { error } = await supabase
@@ -56,13 +58,22 @@ export async function updateSession(
   }
 }
 
-export async function saveRating(sessionId: string, rating: number): Promise<void> {
+export async function saveSessionFeedback(
+  sessionId: string,
+  data: { rating?: number; feedbackText?: string },
+): Promise<void> {
+  const update: { rating?: number; feedback_text?: string } = {};
+  if (data.rating !== undefined) update.rating = data.rating;
+  if (data.feedbackText !== undefined) update.feedback_text = data.feedbackText;
+
+  if (Object.keys(update).length === 0) return;
+
   const { error } = await supabase
     .from('medical_sessions')
-    .update({ rating })
+    .update(update)
     .eq('session_id', sessionId);
 
   if (error) {
-    console.warn('Supabase update error (rating):', error.message);
+    console.warn('Supabase update error (session feedback):', error.message);
   }
 }

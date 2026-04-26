@@ -48,6 +48,7 @@ export interface SessionAnswers {
   travelCountry?: string;
   countryRisk?: string;
   additionalInfo?: string;
+  sessionFeedbackText?: string;
 }
 
 // ─── Flow step IDs ────────────────────────────────────────────────────────────
@@ -77,5 +78,6 @@ export type FlowStep =
   | 'additional_info'
   | 'medication_unknown_retry'
   | 'country_unknown_retry'
+  | 'country_geocode_confirm'
   | 'final'
   | 'rating';

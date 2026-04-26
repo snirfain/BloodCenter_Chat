@@ -11,7 +11,7 @@ export interface Country {
 // Based on MDA and standard blood bank international travel guidelines
 export const countriesDatabase: Country[] = [
   // ── ללא סיכון מיוחד ──────────────────────────────────────────────────────
-  { name: 'ארצות הברית', aliases: ['usa', 'united states', 'אמריקה'], risk: 'none' },
+  { name: 'ארצות הברית', aliases: ['usa', 'united states', 'united states of america', 'אמריקה'], risk: 'none' },
   { name: 'קנדה', aliases: ['canada'], risk: 'none' },
   { name: 'בריטניה', aliases: ['uk', 'england', 'אנגליה', 'scotland', 'wales'], risk: 'none' },
   { name: 'גרמניה', aliases: ['germany', 'deutschland'], risk: 'none' },
@@ -222,8 +222,8 @@ export const countriesDatabase: Country[] = [
     name: 'הודו',
     aliases: ['india'],
     risk: 'malaria',
-    waitTime: '3 חודשים מחזרה',
-    reason: 'אזורים כפריים מסוימים',
+    waitTime: '12 חודשים מחזרה',
+    reason: 'הנחיות ביקור — דחייה 12 חודשים (מד״א)',
   },
   {
     name: 'פקיסטן',

@@ -1,9 +1,11 @@
 import { useState, useCallback, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import type { ChatMessage, FlowStep, SessionAnswers, FinalStatus, Issue, IssueType } from '../types/chat';
-import { searchMedication, type Indication, type Medication } from '../data/medications';
+import { searchMedication, type Medication } from '../data/medications';
+import type { Country } from '../data/countries';
 import { searchCountry } from '../data/countries';
-import { createUser, createSession, updateSession, saveRating } from '../services/db';
+import { createUser, createSession, updateSession, saveSessionFeedback } from '../services/db';
+import { geocodeLookupCountry, resolveCountryFromGeocode } from '../services/geocoding';
 
 // ─── Timing ───────────────────────────────────────────────────────────────────
 const BOT_DELAY_SHORT = 600;
@@ -23,13 +25,16 @@ function overallStatus(issues: Issue[]): FinalStatus {
   return worst.type;
 }
 
-/** זכאות מלאה עם המתנה (למשל קולכיצין) — לא מציגים «ללא מגבלה». */
-function botMessageForFullEligibility(medName: string, ind: Indication): string {
-  const w = ind.waitTime?.trim();
-  if (w) {
-    return `✓ ${medName} — מותר להתרים רק לאחר ${w}. נמשיך.`;
+function infectionIssueFromText(text: string): Issue {
+  const t = text.toLowerCase();
+  if (t.includes('שלשול')) {
+    return {
+      type: 'פסילה זמנית',
+      reason: 'שלשולים',
+      waitTime: 'מותר להתרים שבוע לאחר החלמה',
+    };
   }
-  return `✓ ${medName} — ללא מגבלה. נמשיך.`;
+  return { type: 'בירור רפואי', reason: `מחלה זיהומית: ${text}` };
 }
 
 // ─── Input parsers ────────────────────────────────────────────────────────────
@@ -139,6 +144,12 @@ export function useChatFlow() {
   // ── Country queue ─────────────────────────────────────────────────────────────
   const countryQueueRef           = useRef<string[]>([]);
   const currentUnknownCountryRef  = useRef<string>('');
+  const pendingGeocodeRef         = useRef<{
+    originalInput: string;
+    result:
+      | { kind: 'country'; country: Country }
+      | { kind: 'unmapped'; label: string; displayHe: string };
+  } | null>(null);
 
   // ── Supabase IDs ──────────────────────────────────────────────────────────────
   const userIdRef    = useRef<string | null>(null);
@@ -151,6 +162,31 @@ export function useChatFlow() {
   const addIssue = useCallback((issue: Issue) => {
     issuesRef.current = [...issuesRef.current, issue];
   }, []);
+
+  const applyCountryRules = useCallback(
+    (country: Country) => {
+      if (country.name === 'הודו') {
+        addIssue({ type: 'פסילה זמנית', reason: 'ביקור בהודו', waitTime: '12 חודשים מחזרה' });
+        return;
+      }
+      if (country.risk === 'malaria') {
+        addIssue({
+          type: 'פסילה זמנית',
+          reason: `ביקור באזור מלריה: ${country.name}`,
+          waitTime: '3 חודשים מחזרה',
+        });
+      } else if (country.risk === 'high_risk') {
+        addIssue({
+          type: 'פסילה זמנית',
+          reason: `ביקור באזור בסיכון גבוה: ${country.name}`,
+          waitTime: '6 חודשים מחזרה',
+        });
+      } else if (country.risk === 'bse') {
+        addIssue({ type: 'בירור רפואי', reason: `ביקור — ${country.name} (BSE/נוהל מיוחד)` });
+      }
+    },
+    [addIssue],
+  );
 
   // ── Message helpers ───────────────────────────────────────────────────────────
   const addMessage = useCallback((sender: 'bot' | 'user', text: string): ChatMessage => {
@@ -200,8 +236,7 @@ export function useChatFlow() {
       await addBotMessage(summary, BOT_DELAY_LONG);
       setIsCompleted(true);
 
-      setTimeout(async () => {
-        await addBotMessage('⭐ נשמח לדעת — איך הייתה החוויה שלך עם הבוט?', BOT_DELAY_SHORT);
+      setTimeout(() => {
         setCurrentStep('rating');
       }, 3000);
     },
@@ -220,7 +255,7 @@ export function useChatFlow() {
         case 'weight':
           await addBotMessage('⚖️ האם את/ה שוקל/ת מעל 50 ק״ג?', BOT_DELAY_SHORT); break;
         case 'pregnancy':
-          await addBotMessage('🤰 האם עברת הריון, לידה או הפלה ב-6 חודשים האחרונים?', BOT_DELAY_SHORT); break;
+          await addBotMessage('🤰 האם עברת הריון או לידה ב-6 חודשים האחרונים?', BOT_DELAY_SHORT); break;
         case 'procedure':
           await addBotMessage(
             '🩺 האם ביצעת אחד מאלו ב-4 החודשים האחרונים?\n(קעקוע, פירסינג, קולונוסקופיה, גסטרוסקופיה)',
@@ -304,18 +339,14 @@ export function useChatFlow() {
 
         if (ind.action === 'פסילה קבועה') {
           addIssue({ type: 'פסילה קבועה', reason: `תרופה: ${med.name} — ${ind.reason}` });
-          await addBotMessage(`נרשם (${med.name}). נמשיך.`, BOT_DELAY_SHORT);
         } else if (ind.action === 'פסילה זמנית') {
           addIssue({ type: 'פסילה זמנית', reason: `תרופה: ${med.name}`, waitTime: ind.waitTime });
-          await addBotMessage(`נרשם (${med.name}). נמשיך.`, BOT_DELAY_SHORT);
         } else if (ind.action === 'בירור רפואי') {
           addIssue({ type: 'בירור רפואי', reason: `תרופה: ${med.name} — ${ind.reason}` });
-          await addBotMessage(`נרשם (${med.name}). נמשיך.`, BOT_DELAY_SHORT);
-        } else if (ind.action === 'זכאות מלאה') {
-          await addBotMessage(botMessageForFullEligibility(med.name, ind), BOT_DELAY_SHORT);
-        } else {
-          await addBotMessage(`נרשם (${med.name}). נמשיך.`, BOT_DELAY_SHORT);
+        } else if (ind.action === 'זכאות מלאה' && ind.waitTime?.trim()) {
+          addIssue({ type: 'פסילה זמנית', reason: `תרופה: ${med.name} — ${ind.reason}`, waitTime: ind.waitTime });
         }
+        // זכאות מלאה ללא המתנה / פעולות אחרות — נשמר שקט; הסיכום יוצג רק בגמר.
 
         await processNextMedication(updatedAnswers);
       } else {
@@ -348,6 +379,45 @@ export function useChatFlow() {
       ) ?? results[0];
 
       if (!country) {
+        setIsTyping(true);
+        let geoRes: ReturnType<typeof resolveCountryFromGeocode> = null;
+        try {
+          const osm = await geocodeLookupCountry(name);
+          geoRes = resolveCountryFromGeocode(osm);
+        } catch {
+          /* ignore */
+        } finally {
+          setIsTyping(false);
+        }
+        if (geoRes) {
+          if ('country' in geoRes) {
+            pendingGeocodeRef.current = {
+              originalInput: name,
+              result: { kind: 'country', country: geoRes.country },
+            };
+            const display = geoRes.displayNameHe;
+            await addBotMessage(
+              `זיהינו שהמיקום שציינת שייך ל־${display}. האם התכוונת ל${display}?`,
+              BOT_DELAY_SHORT,
+            );
+            setCurrentStep('country_geocode_confirm');
+            return;
+          }
+          if ('unknownLabel' in geoRes) {
+            const display = geoRes.unknownLabel;
+            pendingGeocodeRef.current = {
+              originalInput: name,
+              result: { kind: 'unmapped', label: geoRes.unknownLabel, displayHe: display },
+            };
+            await addBotMessage(
+              `זיהינו שהמיקום שציינת שייך ל־${display}. האם התכוונת ל${display}?`,
+              BOT_DELAY_SHORT,
+            );
+            setCurrentStep('country_geocode_confirm');
+            return;
+          }
+        }
+
         currentUnknownCountryRef.current = name;
         setCurrentStep('country_unknown_retry');
         await addBotMessage(
@@ -362,19 +432,10 @@ export function useChatFlow() {
         countryRisk: country.risk,
       });
 
-      if (country.risk === 'malaria') {
-        addIssue({ type: 'פסילה זמנית', reason: `ביקור באזור מלריה: ${country.name}`, waitTime: '3 חודשים מחזרה' });
-        await addBotMessage(`נרשם — ${country.name} הוא אזור מלריה. נמשיך.`, BOT_DELAY_SHORT);
-      } else if (country.risk === 'high_risk') {
-        addIssue({ type: 'פסילה זמנית', reason: `ביקור באזור בסיכון גבוה: ${country.name}`, waitTime: '6 חודשים מחזרה' });
-        await addBotMessage(`נרשם — ${country.name} הוא אזור בסיכון גבוה. נמשיך.`, BOT_DELAY_SHORT);
-      } else {
-        await addBotMessage(`✓ ${country.name} — לא נמצאה מגבלה. נמשיך.`, BOT_DELAY_SHORT);
-      }
-
+      applyCountryRules(country);
       await processNextCountry(updatedAnswers);
     },
-    [addBotMessage, addIssue, updateAnswers, goToStep],
+    [addBotMessage, updateAnswers, goToStep, applyCountryRules],
   );
 
   // ── Boot ──────────────────────────────────────────────────────────────────────
@@ -421,7 +482,6 @@ export function useChatFlow() {
           updatedAnswers = updateAnswers({ lastDonation: value });
           if (value === 'less_3months') {
             addIssue({ type: 'פסילה זמנית', reason: 'תרומה אחרונה לפני פחות מ-3 חודשים', waitTime: '3 חודשים מהתרומה האחרונה' });
-            await addBotMessage('נרשם. נמשיך לשאלות הבאות.', BOT_DELAY_SHORT);
           }
           await goToStep('age', updatedAnswers);
           break;
@@ -431,14 +491,15 @@ export function useChatFlow() {
           updatedAnswers = updateAnswers({ age: value });
           if (value === 'under17') {
             addIssue({ type: 'פסילה קבועה', reason: 'גיל מתחת ל-17' });
-            await addBotMessage('נרשם. נמשיך לשאלות הבאות.', BOT_DELAY_SHORT);
           } else if (value === 'over65') {
             addIssue({ type: 'פסילה קבועה', reason: 'גיל מעל 65' });
-            await addBotMessage('נרשם. נמשיך לשאלות הבאות.', BOT_DELAY_SHORT);
           } else if (value === '17_18') {
             addIssue({ type: 'זכאות עם אישור', reason: 'גיל 17–18 — נדרש אישור הורים' });
-          } else if (value === '60_65') {
-            addIssue({ type: 'זכאות עם אישור', reason: 'גיל 60–65 — תרומה רק באתר נייח, בכפוף לבדיקה' });
+          } else if (value === '60_65' && updatedAnswers.lastDonation === 'never') {
+            addIssue({
+              type: 'זכאות עם אישור',
+              reason: 'גיל 60–65, תרומה ראשונה — נדרש אישור רופא, תרומה רק באתר נייח (לא נייד)',
+            });
           }
           await goToStep('weight', updatedAnswers);
           break;
@@ -448,7 +509,6 @@ export function useChatFlow() {
           updatedAnswers = updateAnswers({ weight: value });
           if (value === 'below50') {
             addIssue({ type: 'פסילה קבועה', reason: 'משקל מתחת ל-50 ק״ג' });
-            await addBotMessage('נרשם. נמשיך לשאלות הבאות.', BOT_DELAY_SHORT);
           }
           await goToStep('pregnancy', updatedAnswers);
           break;
@@ -458,7 +518,6 @@ export function useChatFlow() {
           updatedAnswers = updateAnswers({ pregnancy: value });
           if (value === 'yes') {
             addIssue({ type: 'פסילה זמנית', reason: 'הריון / לידה ב-6 חודשים האחרונים', waitTime: '6 חודשים מהלידה' });
-            await addBotMessage('נרשם. נמשיך לשאלות הבאות.', BOT_DELAY_SHORT);
           }
           await goToStep('procedure', updatedAnswers);
           break;
@@ -468,7 +527,6 @@ export function useChatFlow() {
           updatedAnswers = updateAnswers({ procedureType: value });
           if (value === 'tattoo') {
             addIssue({ type: 'פסילה זמנית', reason: 'קעקוע או פירסינג', waitTime: '4 חודשים' });
-            await addBotMessage('נרשם. נמשיך לשאלות הבאות.', BOT_DELAY_SHORT);
             await goToStep('medications', updatedAnswers);
           } else if (value === 'colonoscopy') {
             await goToStep('colonoscopy_biopsy', updatedAnswers);
@@ -488,7 +546,12 @@ export function useChatFlow() {
           updatedAnswers = updateAnswers({ biopsyResult: value });
           if (value === 'abnormal') {
             addIssue({ type: 'בירור רפואי', reason: 'תוצאת ביופסיה לא תקינה' });
-            await addBotMessage('נרשם. נמשיך לשאלות הבאות.', BOT_DELAY_SHORT);
+          } else {
+            addIssue({
+              type: 'פסילה זמנית',
+              reason: 'קולונוסקופיה / גסטרוסקופיה עם ביופסיה (בכפוף לקבלת תוצאת ביופסיה תקינה)',
+              waitTime: '4 חודשים',
+            });
           }
           await goToStep('medications', updatedAnswers);
           break;
@@ -498,7 +561,6 @@ export function useChatFlow() {
           updatedAnswers = updateAnswers({ colonoscopyResult: value });
           if (value === 'abnormal') {
             addIssue({ type: 'בירור רפואי', reason: 'תוצאת קולונוסקופיה / גסטרוסקופיה לא תקינה' });
-            await addBotMessage('נרשם. נמשיך לשאלות הבאות.', BOT_DELAY_SHORT);
           }
           await goToStep('medications', updatedAnswers);
           break;
@@ -519,17 +581,16 @@ export function useChatFlow() {
 
           if (indication.action === 'פסילה קבועה') {
             addIssue({ type: 'פסילה קבועה', reason: `תרופה: ${pendingMedication.name} — ${indication.reason}` });
-            await addBotMessage('נרשם. נמשיך.', BOT_DELAY_SHORT);
           } else if (indication.action === 'פסילה זמנית') {
             addIssue({ type: 'פסילה זמנית', reason: `תרופה: ${pendingMedication.name}`, waitTime: indication.waitTime });
-            await addBotMessage('נרשם. נמשיך.', BOT_DELAY_SHORT);
           } else if (indication.action === 'בירור רפואי') {
             addIssue({ type: 'בירור רפואי', reason: `תרופה: ${pendingMedication.name} — ${indication.reason}` });
-            await addBotMessage('נרשם. נמשיך.', BOT_DELAY_SHORT);
-          } else if (indication.action === 'זכאות מלאה') {
-            await addBotMessage(botMessageForFullEligibility(pendingMedication.name, indication), BOT_DELAY_SHORT);
-          } else {
-            await addBotMessage('נרשם. נמשיך.', BOT_DELAY_SHORT);
+          } else if (indication.action === 'זכאות מלאה' && indication.waitTime?.trim()) {
+            addIssue({
+              type: 'פסילה זמנית',
+              reason: `תרופה: ${pendingMedication.name} — ${indication.reason}`,
+              waitTime: indication.waitTime,
+            });
           }
           setPendingMedication(null);
           // Advance the medication queue
@@ -564,7 +625,6 @@ export function useChatFlow() {
           };
           if (dentalIssues[value]) {
             addIssue(dentalIssues[value]);
-            await addBotMessage('נרשם. נמשיך לשאלות הבאות.', BOT_DELAY_SHORT);
           }
           await goToStep('travel', updatedAnswers);
           break;
@@ -582,13 +642,39 @@ export function useChatFlow() {
           break;
         }
 
+        case 'country_geocode_confirm': {
+          const pending = pendingGeocodeRef.current;
+          if (!pending) break;
+          if (value === 'no') {
+            pendingGeocodeRef.current = null;
+            currentUnknownCountryRef.current = pending.originalInput;
+            setCurrentStep('country_unknown_retry');
+            await addBotMessage('נא להקליד שם מדינה (לא שם עיר/יישוב), או ללחוץ ״אין שם אחר״:', BOT_DELAY_SHORT);
+            break;
+          }
+          if (value !== 'yes') break;
+          pendingGeocodeRef.current = null;
+          if (pending.result.kind === 'country') {
+            const c = pending.result.country;
+            const nextAnswers = updateAnswers({ travelCountry: c.name, countryRisk: c.risk });
+            applyCountryRules(c);
+            await processNextCountry(nextAnswers);
+          } else {
+            const label = pending.result.displayHe;
+            const nextAnswers = updateAnswers({ travelCountry: label, countryRisk: 'unmapped' });
+            addIssue({ type: 'בירור רפואי', reason: `אימות מדינה לנסיעה: ${label}` });
+            await processNextCountry(nextAnswers);
+          }
+          break;
+        }
+
         default: break;
       }
     },
     [
       currentStep, isCompleted, pendingMedication,
       addMessage, addIssue, updateAnswers, addBotMessage,
-      goToStep, processNextMedication,
+      goToStep, processNextMedication, processNextCountry, applyCountryRules,
     ],
   );
 
@@ -617,7 +703,6 @@ export function useChatFlow() {
 
           if (text.trim() === 'אין') {
             addIssue({ type: 'בירור רפואי', reason: `תרופה לא מזוהה: "${originalName}"` });
-            await addBotMessage(`נרשם "${originalName}" לבירור רפואי. נמשיך.`, BOT_DELAY_SHORT);
             await processNextMedication(answersRef.current);
             return;
           }
@@ -645,13 +730,12 @@ export function useChatFlow() {
               addIssue({ type: 'פסילה זמנית', reason: `תרופה: ${med.name}`, waitTime: ind.waitTime });
             } else if (ind.action === 'בירור רפואי') {
               addIssue({ type: 'בירור רפואי', reason: `תרופה: ${med.name} — ${ind.reason}` });
-            } else if (ind.action === 'זכאות מלאה') {
-              await addBotMessage(botMessageForFullEligibility(med.name, ind), BOT_DELAY_SHORT);
-            } else {
-              await addBotMessage(`נרשם (${med.name}). נמשיך.`, BOT_DELAY_SHORT);
-            }
-            if (ind.action !== 'זכאות מלאה') {
-              await addBotMessage(`נרשם (${med.name}). נמשיך.`, BOT_DELAY_SHORT);
+            } else if (ind.action === 'זכאות מלאה' && ind.waitTime?.trim()) {
+              addIssue({
+                type: 'פסילה זמנית',
+                reason: `תרופה: ${med.name} — ${ind.reason}`,
+                waitTime: ind.waitTime,
+              });
             }
             await processNextMedication(updatedAnswers);
           } else {
@@ -668,8 +752,9 @@ export function useChatFlow() {
         // ── Disease details ─────────────────────────────────────────────────────
         case 'disease_details': {
           const updatedAnswers = updateAnswers({ diseaseDetails: text });
-          addIssue({ type: 'בירור רפואי', reason: `מצב רפואי: ${text}` });
-          await addBotMessage('נרשם. נמשיך לשאלות הבאות.', BOT_DELAY_SHORT);
+          if (!/אנדומטריוזיס/i.test(text)) {
+            addIssue({ type: 'בירור רפואי', reason: `מצב רפואי: ${text}` });
+          }
           await goToStep('illness', updatedAnswers);
           break;
         }
@@ -677,8 +762,7 @@ export function useChatFlow() {
         // ── Infection details ───────────────────────────────────────────────────
         case 'infection_details': {
           const updatedAnswers = updateAnswers({ infectionDetails: text });
-          addIssue({ type: 'בירור רפואי', reason: `מחלה זיהומית: ${text}` });
-          await addBotMessage('נרשם. נמשיך לשאלות הבאות.', BOT_DELAY_SHORT);
+          addIssue(infectionIssueFromText(text));
           await goToStep('travel', updatedAnswers);
           break;
         }
@@ -701,7 +785,6 @@ export function useChatFlow() {
 
           if (text.trim() === 'אין') {
             addIssue({ type: 'בירור רפואי', reason: `מדינה לא מזוהה: "${originalName}"` });
-            await addBotMessage(`נרשם "${originalName}" לבירור רפואי. נמשיך.`, BOT_DELAY_SHORT);
             await processNextCountry(answersRef.current);
             return;
           }
@@ -714,6 +797,44 @@ export function useChatFlow() {
           ) ?? results[0];
 
           if (!country) {
+            setIsTyping(true);
+            let geoRes: ReturnType<typeof resolveCountryFromGeocode> = null;
+            try {
+              const osm = await geocodeLookupCountry(text);
+              geoRes = resolveCountryFromGeocode(osm);
+            } catch {
+              /* ignore */
+            } finally {
+              setIsTyping(false);
+            }
+            if (geoRes) {
+              if ('country' in geoRes) {
+                pendingGeocodeRef.current = {
+                  originalInput: text.trim(),
+                  result: { kind: 'country', country: geoRes.country },
+                };
+                const display = geoRes.displayNameHe;
+                await addBotMessage(
+                  `זיהינו שהמיקום שציינת שייך ל־${display}. האם התכוונת ל${display}?`,
+                  BOT_DELAY_SHORT,
+                );
+                setCurrentStep('country_geocode_confirm');
+                return;
+              }
+              if ('unknownLabel' in geoRes) {
+                const display = geoRes.unknownLabel;
+                pendingGeocodeRef.current = {
+                  originalInput: text.trim(),
+                  result: { kind: 'unmapped', label: geoRes.unknownLabel, displayHe: display },
+                };
+                await addBotMessage(
+                  `זיהינו שהמיקום שציינת שייך ל־${display}. האם התכוונת ל${display}?`,
+                  BOT_DELAY_SHORT,
+                );
+                setCurrentStep('country_geocode_confirm');
+                return;
+              }
+            }
             currentUnknownCountryRef.current = text.trim();
             await addBotMessage(
               `לא מצאתי גם את "${text}".\nנסה שם אחר, או לחץ "אין שם אחר" כדי לדלג.`,
@@ -723,15 +844,7 @@ export function useChatFlow() {
           }
 
           const updatedAnswers = updateAnswers({ travelCountry: country.name, countryRisk: country.risk });
-          if (country.risk === 'malaria') {
-            addIssue({ type: 'פסילה זמנית', reason: `ביקור באזור מלריה: ${country.name}`, waitTime: '3 חודשים מחזרה' });
-            await addBotMessage(`נרשם — ${country.name} הוא אזור מלריה. נמשיך.`, BOT_DELAY_SHORT);
-          } else if (country.risk === 'high_risk') {
-            addIssue({ type: 'פסילה זמנית', reason: `ביקור באזור בסיכון גבוה: ${country.name}`, waitTime: '6 חודשים מחזרה' });
-            await addBotMessage(`נרשם — ${country.name} אזור בסיכון גבוה. נמשיך.`, BOT_DELAY_SHORT);
-          } else {
-            await addBotMessage(`✓ ${country.name} — ללא מגבלה. נמשיך.`, BOT_DELAY_SHORT);
-          }
+          applyCountryRules(country);
           await processNextCountry(updatedAnswers);
           break;
         }
@@ -751,7 +864,7 @@ export function useChatFlow() {
     },
     [
       currentStep, addMessage, addIssue, updateAnswers, addBotMessage,
-      goToStep, processNextMedication, processNextCountry,
+      goToStep, processNextMedication, processNextCountry, applyCountryRules,
     ],
   );
 
@@ -774,18 +887,17 @@ export function useChatFlow() {
           reason: `תרומה אחרונה ב-${displayDate} (לפני ${Math.floor(diffDays)} ימים)`,
           waitTime: `עוד ${remaining} ימים`,
         });
-        await addBotMessage(`נרשם — עוד ${remaining} ימים עד שתוכל לתרום. נמשיך לשאלות.`, BOT_DELAY_SHORT);
-      } else {
-        await addBotMessage(`תרמת ב-${displayDate} — עברו יותר מ-3 חודשים. נמשיך.`, BOT_DELAY_SHORT);
       }
       await goToStep('age', updatedAnswers);
     },
     [addMessage, addIssue, updateAnswers, addBotMessage, goToStep],
   );
 
-  // ── Rating ────────────────────────────────────────────────────────────────────
-  const handleRating = useCallback(async (stars: number) => {
-    if (sessionIdRef.current) await saveRating(sessionIdRef.current, stars);
+  // ── Session feedback (rating + notes) ───────────────────────────────────────
+  const handleSessionFeedback = useCallback(async (data: { rating?: number; feedbackText?: string }) => {
+    if (sessionIdRef.current) {
+      await saveSessionFeedback(sessionIdRef.current, data);
+    }
   }, []);
 
   // ── Restart ───────────────────────────────────────────────────────────────────
@@ -803,6 +915,7 @@ export function useChatFlow() {
     currentUnknownMedRef.current  = '';
     countryQueueRef.current           = [];
     currentUnknownCountryRef.current  = '';
+    pendingGeocodeRef.current         = null;
     sessionIdRef.current = null;
 
     if (userIdRef.current) {
@@ -825,7 +938,7 @@ export function useChatFlow() {
     handleQuickReply,
     handleTextSubmit,
     handleDateSubmit,
-    handleRating,
+    handleSessionFeedback,
     handleRestart,
   };
 }

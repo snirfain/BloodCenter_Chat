@@ -28,9 +28,13 @@ create table if not exists public.medical_sessions (
   user_id       uuid not null references public.users(id) on delete cascade,
   answers_log   jsonb not null default '{}'::jsonb,
   final_status  text,   -- one of: זכאות מלאה | זכאות עם אישור | פסילה קבועה | פסילה זמנית | בירור רפואי
-  rating        smallint check (rating >= 1 and rating <= 5),
+  rating         smallint check (rating is null or (rating >= 1 and rating <= 5)),
+  feedback_text  text,   -- free-text after session (not medical history)
   created_at    timestamptz not null default now()
 );
+
+-- Migration for existing projects (safe to re-run)
+alter table public.medical_sessions add column if not exists feedback_text text;
 
 -- Index for quick lookup by user
 create index if not exists idx_sessions_user_id on public.medical_sessions(user_id);

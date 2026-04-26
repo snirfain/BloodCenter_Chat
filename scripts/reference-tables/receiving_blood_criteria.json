@@ -185,8 +185,8 @@
     "id": "criterion-027",
     "subjectHe": "אנדוסקופיה(גסטרוסקופיה, קולונוסקופיה) עם ביופסיה",
     "subjectEn": "Endoscopy(gastroscopy, colonoscopy) with biopsy",
-    "criteria": "דחייה ל-4 חודשים",
-    "remarks": "אם תוצאת הבדיקה תקינה"
+    "criteria": "דחייה ל-4 חודשים (בכפוף לקבלת תוצאת ביופסיה תקינה)",
+    "remarks": "בכפוף לקבלת תוצאת ביופסיה תקינה"
   },
   {
     "id": "criterion-028",

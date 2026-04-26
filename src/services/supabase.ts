@@ -34,6 +34,7 @@ export type Database = {
           answers_log: Record<string, unknown>;
           final_status: string | null;
           rating: number | null;
+          feedback_text: string | null;
           created_at: string;
         };
         Insert: {
@@ -42,6 +43,7 @@ export type Database = {
           answers_log?: Record<string, unknown>;
           final_status?: string | null;
           rating?: number | null;
+          feedback_text?: string | null;
           created_at?: string;
         };
       };

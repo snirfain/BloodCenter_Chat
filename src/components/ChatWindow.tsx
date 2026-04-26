@@ -109,6 +109,12 @@ function getQuickReplies(step: FlowStep, pendingMedication: Medication | null) {
         { label: 'לפני 3 חודשים עד שנה',       value: '3_12_months' },
       ];
 
+    case 'country_geocode_confirm':
+      return [
+        { label: 'כן', value: 'yes' },
+        { label: 'לא', value: 'no' },
+      ];
+
     default:
       return [];
   }
@@ -147,7 +153,7 @@ export const ChatWindow: React.FC = () => {
     handleQuickReply,
     handleTextSubmit,
     handleDateSubmit,
-    handleRating,
+    handleSessionFeedback,
     handleRestart,
   } = useChatFlow();
 
@@ -201,6 +207,7 @@ export const ChatWindow: React.FC = () => {
       case 'dental_type':
       case 'travel':
       case 'travel_timeframe':
+      case 'country_geocode_confirm':
         return quickReplies.length > 0 ? (
           <QuickReply
             options={quickReplies}
@@ -291,8 +298,24 @@ export const ChatWindow: React.FC = () => {
 
       case 'rating':
         return (
-          <div className="px-2 mt-2">
-            <StarRating onRate={handleRating} />
+          <div className="px-4 pt-1 pb-1 space-y-3">
+            <p className="text-center text-sm text-gray-800 font-medium" dir="rtl">
+              נשמח לדעת — איך הייתה החוויה שלך עם הבוט?
+            </p>
+            <StarRating onRate={(n) => handleSessionFeedback({ rating: n })} />
+            <label className="block text-sm text-gray-600 font-medium" dir="rtl" htmlFor="session-feedback">
+              הערות או משוב (אופציונלי)
+            </label>
+            <textarea
+              id="session-feedback"
+              dir="rtl"
+              rows={3}
+              placeholder="כתבו כאן הערות…"
+              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-mda-red/30 focus:border-mda-red"
+              onBlur={(e) => {
+                void handleSessionFeedback({ feedbackText: e.target.value.trim() });
+              }}
+            />
           </div>
         );
 
