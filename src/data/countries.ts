@@ -8,6 +8,20 @@ export interface Country {
   reason?: string;
 }
 
+/** מתאם ל־country_travel_reference.json (country-travel-065) — לא כללי מלריה 3 חודשים. */
+export const INDIA_TRAVEL_REFERENCE = {
+  reason: 'הודו (מלריה — ביקור: דחייה 12 חודשים; שהייה מעל 6 חודשים: דחייה 3 שנים)',
+  waitTime: '12 חודשים מחזרה (ביקור); שהייה מעל 6 חודשים — 3 שנים מהחזרה',
+} as const;
+
+/** זיהוי הודו לפני כללי «מלריה» גנריים (מונע הצגת 3 חודשים בטעות). */
+export function isIndiaCountry(country: Country): boolean {
+  const name = country.name.normalize('NFC').trim();
+  const refHe = 'הודו'.normalize('NFC');
+  if (name === refHe) return true;
+  return country.aliases?.some((a) => /^india$/i.test(a.trim())) ?? false;
+}
+
 // Based on MDA and standard blood bank international travel guidelines
 export const countriesDatabase: Country[] = [
   // ── ללא סיכון מיוחד ──────────────────────────────────────────────────────

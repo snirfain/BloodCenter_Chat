@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import type { ChatMessage, FlowStep, SessionAnswers, FinalStatus, Issue, IssueType } from '../types/chat';
 import { searchMedication, type Medication } from '../data/medications';
 import type { Country } from '../data/countries';
-import { searchCountry } from '../data/countries';
+import { searchCountry, isIndiaCountry, INDIA_TRAVEL_REFERENCE } from '../data/countries';
 import { createUser, createSession, updateSession, saveSessionFeedback } from '../services/db';
 import { geocodeLookupCountry, resolveCountryFromGeocode } from '../services/geocoding';
 
@@ -165,8 +165,13 @@ export function useChatFlow() {
 
   const applyCountryRules = useCallback(
     (country: Country) => {
-      if (country.name === 'הודו') {
-        addIssue({ type: 'פסילה זמנית', reason: 'ביקור בהודו', waitTime: '12 חודשים מחזרה' });
+      // חובה לפני malaria: הודו איננה 3 חודשים ככלל מלריה — ראו country_travel_reference.json (065).
+      if (isIndiaCountry(country)) {
+        addIssue({
+          type: 'פסילה זמנית',
+          reason: INDIA_TRAVEL_REFERENCE.reason,
+          waitTime: INDIA_TRAVEL_REFERENCE.waitTime,
+        });
         return;
       }
       if (country.risk === 'malaria') {
