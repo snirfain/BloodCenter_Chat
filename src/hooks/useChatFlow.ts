@@ -3,9 +3,15 @@ import { v4 as uuidv4 } from 'uuid';
 import type { ChatMessage, FlowStep, SessionAnswers, FinalStatus, Issue, IssueType } from '../types/chat';
 import { searchMedication, type Medication } from '../data/medications';
 import type { Country } from '../data/countries';
-import { searchCountry, isIndiaCountry, INDIA_TRAVEL_REFERENCE } from '../data/countries';
+import {
+  searchCountry,
+  isIndiaCountry,
+  INDIA_TRAVEL_REFERENCE,
+  findCountryFromLlmHints,
+} from '../data/countries';
 import { createUser, createSession, updateSession, saveSessionFeedback } from '../services/db';
 import { geocodeLookupCountry, resolveCountryFromGeocode } from '../services/geocoding';
+import { resolveEntityWithLlm } from '../services/llmEntityResolve';
 
 // ─── Timing ───────────────────────────────────────────────────────────────────
 const BOT_DELAY_SHORT = 600;
@@ -76,8 +82,12 @@ function buildFinalSummary(issues: Issue[]): string {
     lines.push('');
     lines.push('⏳ פסילה זמנית:');
     temporary.forEach((i) => {
-      const wait = i.waitTime ? ` (המתנה: ${i.waitTime})` : '';
-      lines.push(`   • ${i.reason}${wait}`);
+      if (i.summaryLine) {
+        lines.push(`   • ${i.summaryLine}`);
+      } else {
+        const wait = i.waitTime ? ` (המתנה: ${i.waitTime})` : '';
+        lines.push(`   • ${i.reason}${wait}`);
+      }
     });
   }
   if (review.length > 0) {
@@ -151,6 +161,9 @@ export function useChatFlow() {
       | { kind: 'unmapped'; label: string; displayHe: string };
   } | null>(null);
 
+  const pendingMedicationLlmRef   = useRef<{ med: Medication } | null>(null);
+  const pendingDiseaseLlmRef       = useRef<{ raw: string; label: string } | null>(null);
+
   // ── Supabase IDs ──────────────────────────────────────────────────────────────
   const userIdRef    = useRef<string | null>(null);
   const sessionIdRef = useRef<string | null>(null);
@@ -170,7 +183,7 @@ export function useChatFlow() {
         addIssue({
           type: 'פסילה זמנית',
           reason: INDIA_TRAVEL_REFERENCE.reason,
-          waitTime: INDIA_TRAVEL_REFERENCE.waitTime,
+          summaryLine: INDIA_TRAVEL_REFERENCE.summaryLine,
         });
         return;
       }
@@ -351,11 +364,9 @@ export function useChatFlow() {
         } else if (ind.action === 'זכאות מלאה' && ind.waitTime?.trim()) {
           addIssue({ type: 'פסילה זמנית', reason: `תרופה: ${med.name} — ${ind.reason}`, waitTime: ind.waitTime });
         }
-        // זכאות מלאה ללא המתנה / פעולות אחרות — נשמר שקט; הסיכום יוצג רק בגמר.
 
         await processNextMedication(updatedAnswers);
       } else {
-        // Multiple indications — pause queue, ask user
         setPendingMedication(med);
         setCurrentStep('medication_indication');
         await addBotMessage(
@@ -365,6 +376,98 @@ export function useChatFlow() {
       }
     },
     [addBotMessage, addIssue, updateAnswers, goToStep],
+  );
+
+  const applyMedicationMatchFromSearch = useCallback(
+    async (med: Medication) => {
+      const updatedAnswers = updateAnswers({ medicationName: med.name });
+
+      if (med.indications.length === 1) {
+        const ind = med.indications[0];
+        updateAnswers({ medicationIndication: ind.reason, medicationAction: ind.action });
+        if (ind.action === 'פסילה קבועה') {
+          addIssue({ type: 'פסילה קבועה', reason: `תרופה: ${med.name} — ${ind.reason}` });
+        } else if (ind.action === 'פסילה זמנית') {
+          addIssue({ type: 'פסילה זמנית', reason: `תרופה: ${med.name}`, waitTime: ind.waitTime });
+        } else if (ind.action === 'בירור רפואי') {
+          addIssue({ type: 'בירור רפואי', reason: `תרופה: ${med.name} — ${ind.reason}` });
+        } else if (ind.action === 'זכאות מלאה' && ind.waitTime?.trim()) {
+          addIssue({
+            type: 'פסילה זמנית',
+            reason: `תרופה: ${med.name} — ${ind.reason}`,
+            waitTime: ind.waitTime,
+          });
+        }
+        await processNextMedication(updatedAnswers);
+      } else {
+        setPendingMedication(med);
+        setCurrentStep('medication_indication');
+        await addBotMessage(
+          `ל-${med.name} יש מספר שימושים. לאיזו מטרה אתה נוטל תרופה זו?`,
+          BOT_DELAY_SHORT,
+        );
+      }
+    },
+    [updateAnswers, addIssue, processNextMedication, addBotMessage],
+  );
+
+  const tryOfferTravelClarification = useCallback(
+    async (originalInput: string): Promise<boolean> => {
+      setIsTyping(true);
+      try {
+        const osm = await geocodeLookupCountry(originalInput);
+        const geoRes = resolveCountryFromGeocode(osm);
+        if (geoRes) {
+          if ('country' in geoRes) {
+            pendingGeocodeRef.current = {
+              originalInput,
+              result: { kind: 'country', country: geoRes.country },
+            };
+            const display = geoRes.displayNameHe;
+            await addBotMessage(
+              `זיהינו שהמיקום שציינת שייך ל־${display}. האם התכוונת ל${display}?`,
+              BOT_DELAY_SHORT,
+            );
+            setCurrentStep('country_geocode_confirm');
+            return true;
+          }
+          if ('unknownLabel' in geoRes) {
+            const display = geoRes.unknownLabel;
+            pendingGeocodeRef.current = {
+              originalInput,
+              result: { kind: 'unmapped', label: geoRes.unknownLabel, displayHe: display },
+            };
+            await addBotMessage(
+              `זיהינו שהמיקום שציינת שייך ל־${display}. האם התכוונת ל${display}?`,
+              BOT_DELAY_SHORT,
+            );
+            setCurrentStep('country_geocode_confirm');
+            return true;
+          }
+        }
+
+        const llm = await resolveEntityWithLlm('travel', originalInput);
+        if (llm.ok && (llm.countryHe || llm.countryEn)) {
+          const c = findCountryFromLlmHints(llm.countryHe, llm.countryEn);
+          if (c) {
+            pendingGeocodeRef.current = { originalInput, result: { kind: 'country', country: c } };
+            const hint = (llm.userFacingHe || c.name).trim();
+            await addBotMessage(
+              `לפי ניתוח הטקסט (כולל מודל שפה), נראה שהכוונה ל־${hint}.\nהאם להמשיך לפי מדינת ${c.name}?`,
+              BOT_DELAY_SHORT,
+            );
+            setCurrentStep('country_geocode_confirm');
+            return true;
+          }
+        }
+      } catch {
+        /* ignore */
+      } finally {
+        setIsTyping(false);
+      }
+      return false;
+    },
+    [addBotMessage],
   );
 
   // ── Country queue processor ───────────────────────────────────────────────────
@@ -384,44 +487,8 @@ export function useChatFlow() {
       ) ?? results[0];
 
       if (!country) {
-        setIsTyping(true);
-        let geoRes: ReturnType<typeof resolveCountryFromGeocode> = null;
-        try {
-          const osm = await geocodeLookupCountry(name);
-          geoRes = resolveCountryFromGeocode(osm);
-        } catch {
-          /* ignore */
-        } finally {
-          setIsTyping(false);
-        }
-        if (geoRes) {
-          if ('country' in geoRes) {
-            pendingGeocodeRef.current = {
-              originalInput: name,
-              result: { kind: 'country', country: geoRes.country },
-            };
-            const display = geoRes.displayNameHe;
-            await addBotMessage(
-              `זיהינו שהמיקום שציינת שייך ל־${display}. האם התכוונת ל${display}?`,
-              BOT_DELAY_SHORT,
-            );
-            setCurrentStep('country_geocode_confirm');
-            return;
-          }
-          if ('unknownLabel' in geoRes) {
-            const display = geoRes.unknownLabel;
-            pendingGeocodeRef.current = {
-              originalInput: name,
-              result: { kind: 'unmapped', label: geoRes.unknownLabel, displayHe: display },
-            };
-            await addBotMessage(
-              `זיהינו שהמיקום שציינת שייך ל־${display}. האם התכוונת ל${display}?`,
-              BOT_DELAY_SHORT,
-            );
-            setCurrentStep('country_geocode_confirm');
-            return;
-          }
-        }
+        const offered = await tryOfferTravelClarification(name);
+        if (offered) return;
 
         currentUnknownCountryRef.current = name;
         setCurrentStep('country_unknown_retry');
@@ -440,7 +507,7 @@ export function useChatFlow() {
       applyCountryRules(country);
       await processNextCountry(updatedAnswers);
     },
-    [addBotMessage, updateAnswers, goToStep, applyCountryRules],
+    [addBotMessage, updateAnswers, goToStep, applyCountryRules, tryOfferTravelClarification],
   );
 
   // ── Boot ──────────────────────────────────────────────────────────────────────
@@ -673,6 +740,41 @@ export function useChatFlow() {
           break;
         }
 
+        case 'medication_llm_confirm': {
+          const p = pendingMedicationLlmRef.current;
+          if (!p) break;
+          if (value === 'no') {
+            pendingMedicationLlmRef.current = null;
+            setCurrentStep('medication_unknown_retry');
+            await addBotMessage(
+              'ננסה שוב — נא להקליד שם מדויק של התרופה, או ״אין שם אחר״:',
+              BOT_DELAY_SHORT,
+            );
+            break;
+          }
+          if (value !== 'yes') break;
+          pendingMedicationLlmRef.current = null;
+          await applyMedicationMatchFromSearch(p.med);
+          break;
+        }
+
+        case 'disease_llm_confirm': {
+          const pd = pendingDiseaseLlmRef.current;
+          if (!pd) break;
+          if (value === 'no') {
+            pendingDiseaseLlmRef.current = null;
+            setCurrentStep('disease_details');
+            await addBotMessage('בסדר. נא לנסח שוב בקצרה את המצב הרפואי:', BOT_DELAY_SHORT);
+            break;
+          }
+          if (value !== 'yes') break;
+          pendingDiseaseLlmRef.current = null;
+          const nextAnswers = updateAnswers({ diseaseDetails: pd.raw });
+          addIssue({ type: 'בירור רפואי', reason: `מצב רפואי (לאחר אימות טקסט): ${pd.label}` });
+          await goToStep('illness', nextAnswers);
+          break;
+        }
+
         default: break;
       }
     },
@@ -680,6 +782,7 @@ export function useChatFlow() {
       currentStep, isCompleted, pendingMedication,
       addMessage, addIssue, updateAnswers, addBotMessage,
       goToStep, processNextMedication, processNextCountry, applyCountryRules,
+      applyMedicationMatchFromSearch,
     ],
   );
 
@@ -712,9 +815,31 @@ export function useChatFlow() {
             return;
           }
 
-          const matches = searchMedication(text);
+          let matches = searchMedication(text);
           if (matches.length === 0) {
-            // Still not found — ask again
+            setIsTyping(true);
+            try {
+              const llm = await resolveEntityWithLlm('medication', text.trim());
+              if (llm.ok && llm.medicationCandidates?.length) {
+                for (const cand of llm.medicationCandidates) {
+                  const hit = searchMedication(cand)[0];
+                  if (hit) {
+                    pendingMedicationLlmRef.current = { med: hit };
+                    await addBotMessage(
+                      `לא מצאנו התאמה מדויקת במאגר. לפי ניתוח (מודל שפה), ייתכן שהתכוונת ל־«${hit.name}». האם זו התרופה?`,
+                      BOT_DELAY_SHORT,
+                    );
+                    setCurrentStep('medication_llm_confirm');
+                    return;
+                  }
+                }
+              }
+            } catch {
+              /* ignore */
+            } finally {
+              setIsTyping(false);
+            }
+
             currentUnknownMedRef.current = text.trim();
             await addBotMessage(
               `לא מצאתי גם את "${text}" במאגר.\nנסה שם אחר, או לחץ "אין שם אחר" כדי לדלג.`,
@@ -724,42 +849,37 @@ export function useChatFlow() {
           }
 
           const med = matches[0];
-          const updatedAnswers = updateAnswers({ medicationName: med.name });
-
-          if (med.indications.length === 1) {
-            const ind = med.indications[0];
-            updateAnswers({ medicationIndication: ind.reason, medicationAction: ind.action });
-            if (ind.action === 'פסילה קבועה') {
-              addIssue({ type: 'פסילה קבועה', reason: `תרופה: ${med.name} — ${ind.reason}` });
-            } else if (ind.action === 'פסילה זמנית') {
-              addIssue({ type: 'פסילה זמנית', reason: `תרופה: ${med.name}`, waitTime: ind.waitTime });
-            } else if (ind.action === 'בירור רפואי') {
-              addIssue({ type: 'בירור רפואי', reason: `תרופה: ${med.name} — ${ind.reason}` });
-            } else if (ind.action === 'זכאות מלאה' && ind.waitTime?.trim()) {
-              addIssue({
-                type: 'פסילה זמנית',
-                reason: `תרופה: ${med.name} — ${ind.reason}`,
-                waitTime: ind.waitTime,
-              });
-            }
-            await processNextMedication(updatedAnswers);
-          } else {
-            setPendingMedication(med);
-            setCurrentStep('medication_indication');
-            await addBotMessage(
-              `ל-${med.name} יש מספר שימושים. לאיזו מטרה אתה נוטל תרופה זו?`,
-              BOT_DELAY_SHORT,
-            );
-          }
+          await applyMedicationMatchFromSearch(med);
           break;
         }
 
         // ── Disease details ─────────────────────────────────────────────────────
         case 'disease_details': {
-          const updatedAnswers = updateAnswers({ diseaseDetails: text });
-          if (!/אנדומטריוזיס/i.test(text)) {
-            addIssue({ type: 'בירור רפואי', reason: `מצב רפואי: ${text}` });
+          const raw = text.trim();
+          const updatedAnswers = updateAnswers({ diseaseDetails: raw });
+          if (/אנדומטריוזיס/i.test(raw)) {
+            await goToStep('illness', updatedAnswers);
+            break;
           }
+          setIsTyping(true);
+          try {
+            const llm = await resolveEntityWithLlm('disease', raw);
+            if (llm.ok && llm.diseaseSummaryHe?.trim()) {
+              const label = llm.diseaseSummaryHe.trim();
+              pendingDiseaseLlmRef.current = { raw, label };
+              await addBotMessage(
+                `נסחנו את תיאור המצב כ־«${label}».\nהאם זה תואם למה שהתכוונת להצהיר?`,
+                BOT_DELAY_SHORT,
+              );
+              setCurrentStep('disease_llm_confirm');
+              return;
+            }
+          } catch {
+            /* ignore */
+          } finally {
+            setIsTyping(false);
+          }
+          addIssue({ type: 'בירור רפואי', reason: `מצב רפואי: ${raw}` });
           await goToStep('illness', updatedAnswers);
           break;
         }
@@ -802,44 +922,9 @@ export function useChatFlow() {
           ) ?? results[0];
 
           if (!country) {
-            setIsTyping(true);
-            let geoRes: ReturnType<typeof resolveCountryFromGeocode> = null;
-            try {
-              const osm = await geocodeLookupCountry(text);
-              geoRes = resolveCountryFromGeocode(osm);
-            } catch {
-              /* ignore */
-            } finally {
-              setIsTyping(false);
-            }
-            if (geoRes) {
-              if ('country' in geoRes) {
-                pendingGeocodeRef.current = {
-                  originalInput: text.trim(),
-                  result: { kind: 'country', country: geoRes.country },
-                };
-                const display = geoRes.displayNameHe;
-                await addBotMessage(
-                  `זיהינו שהמיקום שציינת שייך ל־${display}. האם התכוונת ל${display}?`,
-                  BOT_DELAY_SHORT,
-                );
-                setCurrentStep('country_geocode_confirm');
-                return;
-              }
-              if ('unknownLabel' in geoRes) {
-                const display = geoRes.unknownLabel;
-                pendingGeocodeRef.current = {
-                  originalInput: text.trim(),
-                  result: { kind: 'unmapped', label: geoRes.unknownLabel, displayHe: display },
-                };
-                await addBotMessage(
-                  `זיהינו שהמיקום שציינת שייך ל־${display}. האם התכוונת ל${display}?`,
-                  BOT_DELAY_SHORT,
-                );
-                setCurrentStep('country_geocode_confirm');
-                return;
-              }
-            }
+            const offered = await tryOfferTravelClarification(text.trim());
+            if (offered) return;
+
             currentUnknownCountryRef.current = text.trim();
             await addBotMessage(
               `לא מצאתי גם את "${text}".\nנסה שם אחר, או לחץ "אין שם אחר" כדי לדלג.`,
@@ -870,6 +955,7 @@ export function useChatFlow() {
     [
       currentStep, addMessage, addIssue, updateAnswers, addBotMessage,
       goToStep, processNextMedication, processNextCountry, applyCountryRules,
+      tryOfferTravelClarification, applyMedicationMatchFromSearch,
     ],
   );
 
@@ -921,6 +1007,8 @@ export function useChatFlow() {
     countryQueueRef.current           = [];
     currentUnknownCountryRef.current  = '';
     pendingGeocodeRef.current         = null;
+    pendingMedicationLlmRef.current   = null;
+    pendingDiseaseLlmRef.current      = null;
     sessionIdRef.current = null;
 
     if (userIdRef.current) {

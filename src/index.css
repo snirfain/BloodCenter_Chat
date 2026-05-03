@@ -38,7 +38,10 @@
   }
 
   .star-btn {
-    @apply text-4xl transition-transform duration-100 active:scale-110 focus:outline-none focus:ring-2 focus:ring-mda-red rounded;
+    /* גודל הגליף רק בתוך ה־StarRating — כאן רק טפטוף והתממשקות מגע */
+    @apply inline-flex items-center justify-center p-0 border-0 bg-transparent rounded
+      appearance-none cursor-pointer leading-none outline-none transition-colors duration-150
+      focus-visible:ring-2 focus-visible:ring-mda-red focus-visible:ring-offset-1 disabled:opacity-60 disabled:cursor-not-allowed;
   }
 }
 

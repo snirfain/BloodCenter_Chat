@@ -22,7 +22,7 @@ export const StarRating: React.FC<StarRatingProps> = ({ onRate, disabled }) => {
       <div
         role="group"
         aria-label="דירוג מ-1 עד 5 כוכבים"
-        className="flex items-center gap-1"
+        className="flex flex-row flex-nowrap items-center justify-center gap-0.5 min-h-[3rem]"
         dir="ltr"
       >
         {[1, 2, 3, 4, 5].map((star) => {
@@ -33,18 +33,19 @@ export const StarRating: React.FC<StarRatingProps> = ({ onRate, disabled }) => {
               type="button"
               aria-label={`${star} כוכבים — ${labels[star]}`}
               aria-pressed={selected === star}
-              className="star-btn leading-none focus:outline-none focus:ring-2 focus:ring-mda-red rounded"
+              className="star-btn size-11 shrink-0"
               onMouseEnter={() => !selected && setHovered(star)}
               onMouseLeave={() => !selected && setHovered(0)}
               onClick={() => handleSelect(star)}
               disabled={disabled || !!selected}
             >
               <span
+                aria-hidden
+                className="block text-[2rem] leading-none font-normal"
                 style={{
                   color: isFilled ? '#F59E0B' : '#D1D5DB',
-                  fontSize: '2rem',
-                  lineHeight: 1,
                   transition: 'color 0.15s',
+                  fontFamily: 'system-ui, "Segoe UI Symbol", "Apple Color Emoji", sans-serif',
                 }}
               >
                 ★

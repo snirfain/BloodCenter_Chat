@@ -21,6 +21,8 @@ export interface Issue {
   type: IssueType;
   reason: string;
   waitTime?: string;
+  /** אם מוגדר, מוצג בסיכום במקום שילוב reason + (המתנה: waitTime) */
+  summaryLine?: string;
 }
 
 export interface SessionAnswers {
@@ -79,5 +81,7 @@ export type FlowStep =
   | 'medication_unknown_retry'
   | 'country_unknown_retry'
   | 'country_geocode_confirm'
+  | 'medication_llm_confirm'
+  | 'disease_llm_confirm'
   | 'final'
   | 'rating';

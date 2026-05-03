@@ -110,6 +110,8 @@ function getQuickReplies(step: FlowStep, pendingMedication: Medication | null) {
       ];
 
     case 'country_geocode_confirm':
+    case 'medication_llm_confirm':
+    case 'disease_llm_confirm':
       return [
         { label: 'כן', value: 'yes' },
         { label: 'לא', value: 'no' },
@@ -208,6 +210,8 @@ export const ChatWindow: React.FC = () => {
       case 'travel':
       case 'travel_timeframe':
       case 'country_geocode_confirm':
+      case 'medication_llm_confirm':
+      case 'disease_llm_confirm':
         return quickReplies.length > 0 ? (
           <QuickReply
             options={quickReplies}

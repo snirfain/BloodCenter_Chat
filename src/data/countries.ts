@@ -8,10 +8,13 @@ export interface Country {
   reason?: string;
 }
 
-/** מתאם ל־country_travel_reference.json (country-travel-065) — לא כללי מלריה 3 חודשים. */
+/** מתאם ל־country_travel_reference.json (country-travel-065) — תצוגה אחת ללא כפילות reason/waitTime. */
 export const INDIA_TRAVEL_REFERENCE = {
-  reason: 'הודו (מלריה — ביקור: דחייה 12 חודשים; שהייה מעל 6 חודשים: דחייה 3 שנים)',
-  waitTime: '12 חודשים מחזרה (ביקור); שהייה מעל 6 חודשים — 3 שנים מהחזרה',
+  /** ללוגיקה פנימית / Supabase */
+  reason: 'נסיעה להודו (מלריה — נוהל מד״א)',
+  /** שורה אחת קריאה בסיכום הסופי */
+  summaryLine:
+    'נסיעה להודו (מלריה): דחייה של 12 חודשים מהחזרה לביקור רגיל; אם שהית בהודו מעל שישה חודשים — דחייה של שלוש שנים מהחזרה.',
 } as const;
 
 /** זיהוי הודו לפני כללי «מלריה» גנריים (מונע הצגת 3 חודשים בטעות). */
@@ -234,7 +237,7 @@ export const countriesDatabase: Country[] = [
   },
   {
     name: 'הודו',
-    aliases: ['india'],
+    aliases: ['india', 'delhi', 'new delhi', 'דלהי', 'ניו דלהי', 'ניי דלהי'],
     risk: 'malaria',
     waitTime: '12 חודשים מחזרה',
     reason: 'הנחיות ביקור — דחייה 12 חודשים (מד״א)',
@@ -382,4 +385,28 @@ export function getCountryByName(name: string): Country | undefined {
   return countriesDatabase.find((c) => {
     return c.name.toLowerCase() === q || c.aliases?.some((a) => a.toLowerCase() === q);
   });
+}
+
+/** יישור מול תשובת LLM (עברית/אנגלית) למבנה Country במאגר */
+export function findCountryFromLlmHints(
+  countryHe: string | null | undefined,
+  countryEn: string | null | undefined,
+): Country | undefined {
+  const tryHe = countryHe?.normalize('NFC').trim();
+  if (tryHe) {
+    const byName = countriesDatabase.find((c) => c.name === tryHe);
+    if (byName) return byName;
+    const hits = searchCountry(tryHe);
+    const exact = hits.find((c) => c.name === tryHe) ?? hits[0];
+    if (exact) return exact;
+  }
+  const en = countryEn?.trim().toLowerCase();
+  if (en) {
+    return countriesDatabase.find(
+      (c) =>
+        c.aliases?.some((a) => a.toLowerCase() === en) ||
+        c.name.toLowerCase() === en,
+    );
+  }
+  return undefined;
 }
