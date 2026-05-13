@@ -125,6 +125,7 @@ function buildFinalSummary(issues: Issue[]): string {
 }
 
 // ─── Phone Validator ──────────────────────────────────────────────────────────
+/** Accepts display forms like 05X-XXXXXXX or 05XXXXXXXX (dash stripped before check). */
 export function validateIsraeliPhone(phone: string): string | null {
   const cleaned = phone.replace(/[-\s]/g, '');
   if (!/^05\d{8}$/.test(cleaned)) {
@@ -815,7 +816,7 @@ export function useChatFlow() {
             return;
           }
 
-          let matches = searchMedication(text);
+          const matches = searchMedication(text);
           if (matches.length === 0) {
             setIsTyping(true);
             try {

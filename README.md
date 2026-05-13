@@ -43,10 +43,9 @@ src/
 │   ├── QuickReply.tsx      # Quick reply button grid
 │   ├── TextInput.tsx       # Free-text input with validation
 │   ├── MedicationSearch.tsx # Fuzzy medication autocomplete
-│   ├── CountrySearch.tsx   # Country autocomplete with risk tags
 │   └── StarRating.tsx      # 1–5 star rating widget
 ├── data/
-│   ├── medications.ts      # 40+ medications with per-indication logic
+│   ├── medications.ts      # MDA medication rules (from medication_eligibility.tsv)
 │   └── countries.ts        # 80+ countries with malaria/risk classification
 ├── hooks/
 │   └── useChatFlow.ts      # Full state machine — all flow logic lives here

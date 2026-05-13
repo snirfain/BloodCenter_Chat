@@ -4,7 +4,7 @@ import { MessageBubble, TypingIndicator } from './MessageBubble';
 import { QuickReply } from './QuickReply';
 import { TextInput } from './TextInput';
 import { MedicationSearch } from './MedicationSearch';
-import { StarRating } from './StarRating';
+import { RatingSheet } from './RatingSheet';
 import { DatePickerInput } from './DatePickerInput';
 import { useChatFlow, validateIsraeliPhone } from '../hooks/useChatFlow';
 import type { FlowStep } from '../types/chat';
@@ -164,7 +164,7 @@ export const ChatWindow: React.FC = () => {
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, isTyping]);
+  }, [messages, isTyping, currentStep]);
 
   useEffect(() => {
     if (!chatStarted.current) {
@@ -188,6 +188,10 @@ export const ChatWindow: React.FC = () => {
             type="tel"
             validate={validateIsraeliPhone}
             disabled={isInteractionDisabled}
+            format={(v) => {
+              const digits = v.replace(/\D/g, '').slice(0, 10);
+              return digits.length > 3 ? `${digits.slice(0, 3)}-${digits.slice(3)}` : digits;
+            }}
           />
         );
 
@@ -300,29 +304,6 @@ export const ChatWindow: React.FC = () => {
           </div>
         );
 
-      case 'rating':
-        return (
-          <div className="px-4 pt-1 pb-1 space-y-3">
-            <p className="text-center text-sm text-gray-800 font-medium" dir="rtl">
-              נשמח לדעת — איך הייתה החוויה שלך עם הבוט?
-            </p>
-            <StarRating onRate={(n) => handleSessionFeedback({ rating: n })} />
-            <label className="block text-sm text-gray-600 font-medium" dir="rtl" htmlFor="session-feedback">
-              הערות או משוב (אופציונלי)
-            </label>
-            <textarea
-              id="session-feedback"
-              dir="rtl"
-              rows={3}
-              placeholder="כתבו כאן הערות…"
-              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-mda-red/30 focus:border-mda-red"
-              onBlur={(e) => {
-                void handleSessionFeedback({ feedbackText: e.target.value.trim() });
-              }}
-            />
-          </div>
-        );
-
       default:
         return null;
     }
@@ -337,7 +318,7 @@ export const ChatWindow: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col flex-1 min-h-0">
+    <div className="flex flex-col flex-1 min-h-0 relative">
       <main
         className="flex-1 overflow-y-auto chat-scroll px-4 py-4 space-y-1"
         role="log"
@@ -361,38 +342,40 @@ export const ChatWindow: React.FC = () => {
         </div>
       )}
 
-      <div
-        className="border-t border-gray-200 bg-white px-0 pt-3 pb-4"
-        style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}
-      >
-        {renderInput()}
+      {currentStep !== 'rating' && (
+        <div
+          className="border-t border-gray-200 bg-white px-0 pt-3 pb-4 shrink-0"
+          style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}
+        >
+          {renderInput()}
 
-        {isCompleted && currentStep !== 'rating' && (
-          <div className="px-4 mt-3">
-            <button
-              onClick={handleRestart}
-              type="button"
-              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-full bg-gray-100 text-gray-700 font-medium text-sm hover:bg-gray-200 active:scale-95 transition-all focus:outline-none focus:ring-2 focus:ring-gray-400"
-            >
-              <RefreshCw className="w-4 h-4" />
-              התחל שאלון מחדש
-            </button>
-          </div>
-        )}
+          {isCompleted && (
+            <div className="px-4 mt-3">
+              <button
+                onClick={handleRestart}
+                type="button"
+                className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-full bg-gray-100 text-gray-700 font-medium text-sm hover:bg-gray-200 active:scale-95 transition-all focus:outline-none focus:ring-2 focus:ring-gray-400"
+              >
+                <RefreshCw className="w-4 h-4" />
+                התחל שאלון מחדש
+              </button>
+            </div>
+          )}
+        </div>
+      )}
 
-        {currentStep === 'rating' && (
-          <div className="px-4 mt-3">
-            <button
-              onClick={handleRestart}
-              type="button"
-              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-full bg-mda-red text-white font-medium text-sm hover:bg-mda-red-dark active:scale-95 transition-all focus:outline-none focus:ring-2 focus:ring-mda-red"
-            >
-              <RefreshCw className="w-4 h-4" />
-              התחל שאלון מחדש
-            </button>
-          </div>
-        )}
-      </div>
+      {currentStep === 'rating' && (
+        <RatingSheet
+          onFeedbackRating={(n) => {
+            void handleSessionFeedback({ rating: n });
+          }}
+          onFeedbackText={(t) => {
+            void handleSessionFeedback({ feedbackText: t });
+          }}
+          onRestart={handleRestart}
+          disabled={isInteractionDisabled}
+        />
+      )}
     </div>
   );
 };

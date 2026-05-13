@@ -7,6 +7,8 @@ interface TextInputProps {
   disabled?: boolean;
   type?: 'text' | 'tel' | 'date';
   validate?: (value: string) => string | null; // returns error message or null
+  /** Optional live formatter (e.g. phone XXX-XXXXXXX); submit still receives trimmed display text */
+  format?: (value: string) => string;
   autoFocus?: boolean;
 }
 
@@ -16,6 +18,7 @@ export const TextInput: React.FC<TextInputProps> = ({
   disabled = false,
   type = 'text',
   validate,
+  format,
   autoFocus = true,
 }) => {
   const [value, setValue] = useState('');
@@ -57,7 +60,8 @@ export const TextInput: React.FC<TextInputProps> = ({
           type={type}
           value={value}
           onChange={(e) => {
-            setValue(e.target.value);
+            const raw = e.target.value;
+            setValue(format ? format(raw) : raw);
             if (error) setError(null);
           }}
           onKeyDown={handleKeyDown}
