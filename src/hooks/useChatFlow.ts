@@ -4,6 +4,7 @@ import type { ChatMessage, FlowStep, SessionAnswers, FinalStatus, Issue, IssueTy
 import {
   searchMedication,
   findBestFuzzyHebrewMedicationMatch,
+  findBestFuzzyLatinAliasMatch,
   firstMedicationHitForCandidateStrings,
   type Medication,
 } from '../data/medications';
@@ -345,6 +346,28 @@ export function useChatFlow() {
       const matches = searchMedication(name);
 
       if (matches.length === 0) {
+        const trimmed = name.trim();
+        const quickHe = findBestFuzzyHebrewMedicationMatch(trimmed);
+        if (quickHe) {
+          pendingMedicationLlmRef.current = { med: quickHe, userTyped: name };
+          await addBotMessage(
+            `הקלדת «${name}». נמצאה התאמה קרובה במאגר: «${quickHe.name}».\nהאם זו התרופה?`,
+            BOT_DELAY_SHORT,
+          );
+          setCurrentStep('medication_llm_confirm');
+          return;
+        }
+        const quickLat = findBestFuzzyLatinAliasMatch(trimmed);
+        if (quickLat) {
+          pendingMedicationLlmRef.current = { med: quickLat, userTyped: name };
+          await addBotMessage(
+            `הקלדת «${name}». נמצאה התאמה קרובה לשם בלטינית במאגר: «${quickLat.name}».\nהאם זו התרופה?`,
+            BOT_DELAY_SHORT,
+          );
+          setCurrentStep('medication_llm_confirm');
+          return;
+        }
+
         setIsTyping(true);
         try {
           const llm = await resolveEntityWithLlm('medication', name.trim());
@@ -359,16 +382,6 @@ export function useChatFlow() {
               setCurrentStep('medication_llm_confirm');
               return;
             }
-          }
-          const fuzzy = findBestFuzzyHebrewMedicationMatch(name);
-          if (fuzzy) {
-            pendingMedicationLlmRef.current = { med: fuzzy, userTyped: name };
-            await addBotMessage(
-              `הקלדת «${name}». נמצאה התאמה קרובה במאגר: «${fuzzy.name}».\nהאם זו התרופה?`,
-              BOT_DELAY_SHORT,
-            );
-            setCurrentStep('medication_llm_confirm');
-            return;
           }
         } catch {
           /* ignore */
@@ -854,30 +867,42 @@ export function useChatFlow() {
 
           const matches = searchMedication(text);
           if (matches.length === 0) {
+            const q = text.trim();
+            const quickHe = findBestFuzzyHebrewMedicationMatch(q);
+            if (quickHe) {
+              pendingMedicationLlmRef.current = { med: quickHe, userTyped: q };
+              await addBotMessage(
+                `הקלדת «${q}». נמצאה התאמה קרובה במאגר: «${quickHe.name}».\nהאם זו התרופה?`,
+                BOT_DELAY_SHORT,
+              );
+              setCurrentStep('medication_llm_confirm');
+              return;
+            }
+            const quickLat = findBestFuzzyLatinAliasMatch(q);
+            if (quickLat) {
+              pendingMedicationLlmRef.current = { med: quickLat, userTyped: q };
+              await addBotMessage(
+                `הקלדת «${q}». נמצאה התאמה קרובה לשם בלטינית במאגר: «${quickLat.name}».\nהאם זו התרופה?`,
+                BOT_DELAY_SHORT,
+              );
+              setCurrentStep('medication_llm_confirm');
+              return;
+            }
+
             setIsTyping(true);
             try {
-              const llm = await resolveEntityWithLlm('medication', text.trim());
+              const llm = await resolveEntityWithLlm('medication', q);
               if (llm.ok && llm.medicationCandidates?.length) {
                 const hit = firstMedicationHitForCandidateStrings(llm.medicationCandidates);
                 if (hit) {
-                  pendingMedicationLlmRef.current = { med: hit, userTyped: text.trim() };
+                  pendingMedicationLlmRef.current = { med: hit, userTyped: q };
                   await addBotMessage(
-                    `הקלדת «${text.trim()}». לפי בדיקה חיצונית במאגר, ייתכן שהתכוונת ל־«${hit.name}».\nהאם זו התרופה?`,
+                    `הקלדת «${q}». לפי בדיקה חיצונית במאגר, ייתכן שהתכוונת ל־«${hit.name}».\nהאם זו התרופה?`,
                     BOT_DELAY_SHORT,
                   );
                   setCurrentStep('medication_llm_confirm');
                   return;
                 }
-              }
-              const fuzzy = findBestFuzzyHebrewMedicationMatch(text);
-              if (fuzzy) {
-                pendingMedicationLlmRef.current = { med: fuzzy, userTyped: text.trim() };
-                await addBotMessage(
-                  `הקלדת «${text.trim()}». נמצאה התאמה קרובה במאגר: «${fuzzy.name}».\nהאם זו התרופה?`,
-                  BOT_DELAY_SHORT,
-                );
-                setCurrentStep('medication_llm_confirm');
-                return;
               }
             } catch {
               /* ignore */
