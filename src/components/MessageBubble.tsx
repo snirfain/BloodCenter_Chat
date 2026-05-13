@@ -5,6 +5,54 @@ interface MessageBubbleProps {
   message: ChatMessage;
 }
 
+/** Split a line into text and link segments (https URLs + bare mdais.org paths). */
+function lineToLinkParts(line: string): { type: 'text' | 'link'; value: string; href?: string }[] {
+  const re = /(https?:\/\/[^\s<>"')\]]+|mdais\.org[^\s<>"')\]]*)/gi;
+  const parts: { type: 'text' | 'link'; value: string; href?: string }[] = [];
+  let lastIndex = 0;
+  for (const m of line.matchAll(re)) {
+    const idx = m.index ?? 0;
+    const raw = m[0];
+    if (idx > lastIndex) {
+      parts.push({ type: 'text', value: line.slice(lastIndex, idx) });
+    }
+    const isFullUrl = /^https?:\/\//i.test(raw);
+    const href = isFullUrl ? raw : `https://${raw.replace(/^\/+/, '')}`;
+    parts.push({ type: 'link', value: raw, href });
+    lastIndex = idx + raw.length;
+  }
+  if (lastIndex < line.length) {
+    parts.push({ type: 'text', value: line.slice(lastIndex) });
+  }
+  if (parts.length === 0) {
+    parts.push({ type: 'text', value: line });
+  }
+  return parts;
+}
+
+function renderBotLine(line: string, lineIndex: number) {
+  const segments = lineToLinkParts(line);
+  return (
+    <React.Fragment key={lineIndex}>
+      {segments.map((seg, i) =>
+        seg.type === 'link' && seg.href ? (
+          <a
+            key={i}
+            href={seg.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline text-blue-700 break-all"
+          >
+            {seg.value}
+          </a>
+        ) : (
+          <React.Fragment key={i}>{seg.value}</React.Fragment>
+        ),
+      )}
+    </React.Fragment>
+  );
+}
+
 export const TypingIndicator: React.FC = () => (
   <div className="flex items-end gap-2 mb-3 message-enter" role="status" aria-label="הבוט מקליד">
     <div className="w-8 h-8 rounded-full bg-mda-red flex items-center justify-center shrink-0 self-end">
@@ -22,9 +70,9 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
   const isBot = message.sender === 'bot';
 
   if (isBot) {
+    const botLines = message.text.split('\n');
     return (
       <div className="flex items-end gap-2 mb-3 message-enter">
-        {/* Bot avatar */}
         <div
           className="w-8 h-8 rounded-full bg-mda-red flex items-center justify-center shrink-0 self-end"
           aria-hidden="true"
@@ -38,11 +86,10 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({ message }) => {
           aria-label={`הודעת בוט: ${message.text}`}
           dir="rtl"
         >
-          {/* Support newlines in bot messages */}
-          {message.text.split('\n').map((line, i) => (
+          {botLines.map((line, i) => (
             <React.Fragment key={i}>
-              {line}
-              {i < message.text.split('\n').length - 1 && <br />}
+              {renderBotLine(line, i)}
+              {i < botLines.length - 1 && <br />}
             </React.Fragment>
           ))}
         </div>

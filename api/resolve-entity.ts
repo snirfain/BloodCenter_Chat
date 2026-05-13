@@ -15,10 +15,11 @@ At least one of countryHe or countryEn must be non-null when the input clearly r
 If the place is ambiguous, set both to null and userFacingHe to a short Hebrew question mark phrase.`;
   }
   if (context === 'medication') {
-    return `You help map user-typed medication names (Hebrew/English/brand) to names that might exist in a pharmacy database.
+    return `You help map user-typed medication names (Hebrew/English/transliterated/typos) to entries in Israel's Magen David Adom (MDA) blood-donation medication list.
 Return ONLY valid JSON with keys:
-- medicationCandidates (array of 1-3 strings): best generic or brand names to try, in Hebrew or Latin as appropriate
-If unknown, return {"medicationCandidates":[]}.`;
+- medicationCandidates (array of 3-5 strings): include (1) the most likely Hebrew brand/trade name as used on Israeli pharmacy labels and on mdais.org blood-donation pages, (2) common alternate Hebrew spellings if any, (3) Latin INN/generic name(s) (e.g. isotretinoin, ibuprofen), (4) well-known English brand names if helpful.
+Prefer exact Hebrew wording when you know it. Sort best guesses first.
+If truly unknown or not a medication, return {"medicationCandidates":[]}.`;
   }
   if (context === 'disease') {
     return `You normalize a lay description of a chronic condition into a short clinical Hebrew label for medical triage (not a diagnosis).
