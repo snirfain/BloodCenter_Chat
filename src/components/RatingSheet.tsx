@@ -5,6 +5,8 @@ import { StarRating } from './StarRating';
 interface RatingSheetProps {
   onFeedbackRating: (rating: number) => void;
   onFeedbackText: (text: string) => void;
+  /** שליחה מפורשת — דירוג (אם נבחר) + טקסט נוכחי */
+  onSubmitFeedback: (data: { rating: number | null; feedbackText: string }) => void;
   onRestart: () => void;
   disabled?: boolean;
 }
@@ -12,10 +14,27 @@ interface RatingSheetProps {
 export const RatingSheet: React.FC<RatingSheetProps> = ({
   onFeedbackRating,
   onFeedbackText,
+  onSubmitFeedback,
   onRestart,
   disabled = false,
 }) => {
   const [expanded, setExpanded] = useState(false);
+  const [feedbackDraft, setFeedbackDraft] = useState('');
+  const [rating, setRating] = useState<number | null>(null);
+  const [savedHint, setSavedHint] = useState(false);
+
+  const flushTextBlur = () => {
+    const t = feedbackDraft.trim();
+    if (t) onFeedbackText(t);
+  };
+
+  const handleSubmit = () => {
+    const t = feedbackDraft.trim();
+    if (!rating && !t) return;
+    onSubmitFeedback({ rating, feedbackText: t });
+    setSavedHint(true);
+    window.setTimeout(() => setSavedHint(false), 4500);
+  };
 
   return (
     <div
@@ -46,7 +65,13 @@ export const RatingSheet: React.FC<RatingSheetProps> = ({
               <p className="text-center text-sm text-gray-800 font-medium" dir="rtl">
                 נשמח לדעת — איך הייתה החוויה שלך עם הבוט?
               </p>
-              <StarRating onRate={onFeedbackRating} disabled={disabled} />
+              <StarRating
+                onRate={(n) => {
+                  setRating(n);
+                  onFeedbackRating(n);
+                }}
+                disabled={disabled}
+              />
               <label className="block text-sm text-gray-600 font-medium" dir="rtl" htmlFor="session-feedback-sheet">
                 הערות או משוב (אופציונלי)
               </label>
@@ -56,12 +81,24 @@ export const RatingSheet: React.FC<RatingSheetProps> = ({
                 rows={3}
                 placeholder="כתבו כאן הערות…"
                 disabled={disabled}
+                value={feedbackDraft}
+                onChange={(e) => setFeedbackDraft(e.target.value)}
                 className="w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-mda-red/30 focus:border-mda-red disabled:opacity-50"
-                onBlur={(e) => {
-                  const t = e.target.value.trim();
-                  if (t) onFeedbackText(t);
-                }}
+                onBlur={() => flushTextBlur()}
               />
+              <button
+                type="button"
+                onClick={() => handleSubmit()}
+                disabled={disabled || (!rating && !feedbackDraft.trim())}
+                className="w-full py-3 px-4 rounded-full border-2 border-mda-red text-mda-red font-medium text-sm hover:bg-mda-red hover:text-white transition-colors disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-mda-red"
+              >
+                שלח משוב
+              </button>
+              {savedHint && (
+                <p className="text-center text-sm text-green-700 font-medium" dir="rtl" role="status">
+                  תודה, המשוב נשמר
+                </p>
+              )}
               <button
                 onClick={onRestart}
                 type="button"

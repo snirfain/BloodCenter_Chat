@@ -51,6 +51,15 @@ export interface SessionAnswers {
   countryRisk?: string;
   additionalInfo?: string;
   sessionFeedbackText?: string;
+
+  /** נוסף ב־finishFlow לצורך ביקורת מנהלים (לא בשאלון חי) */
+  computed_issues?: Array<{
+    type: IssueType;
+    reason: string;
+    waitTime?: string;
+    summaryLine?: string;
+  }>;
+  eligibility_summary_text?: string;
 }
 
 // ─── Flow step IDs ────────────────────────────────────────────────────────────

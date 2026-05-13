@@ -1,8 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Header } from './components/Header';
 import { ChatWindow } from './components/ChatWindow';
+import { AdminDashboard } from './pages/AdminDashboard';
 
 const App: React.FC = () => {
+  const [adminRoute, setAdminRoute] = useState(() =>
+    typeof window !== 'undefined'
+      ? window.location.pathname.replace(/\/+$/, '') === '/admin'
+      : false,
+  );
+
+  useEffect(() => {
+    const sync = () =>
+      setAdminRoute(window.location.pathname.replace(/\/+$/, '') === '/admin');
+    window.addEventListener('popstate', sync);
+    return () => window.removeEventListener('popstate', sync);
+  }, []);
+
+  if (adminRoute) {
+    return (
+      <div className="min-h-dvh overflow-auto bg-gray-200" dir="rtl" lang="he">
+        <AdminDashboard />
+      </div>
+    );
+  }
+
   return (
     /* Outer wrapper: exactly the viewport — no page scroll ever */
     <div className="h-dvh overflow-hidden bg-gray-200 flex flex-col py-0 sm:py-8 px-0 sm:px-4" dir="rtl" lang="he">

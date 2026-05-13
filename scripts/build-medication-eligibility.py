@@ -41,6 +41,23 @@ def extract_wait_time(g: str) -> str | None:
         m = re.search(pat, g)
         if m:
             return m.group(0).strip().rstrip(".,")
+
+    # MDA often writes "חודש לאחר סיום" without a leading digit — capture full deferral phrase
+    no_leading_digit = [
+        r"חודשיים\s*לאחר[^\n.]*",
+        r"חודש\s*לאחר[^\n.]*",
+        r"שבועיים\s*לאחר[^\n.]*",
+        r"שבוע\s*לאחר[^\n.]*",
+        r"יומיים\s*לאחר[^\n.]*",
+        r"יום\s*לאחר[^\n.]*",
+        r"שנתיים\s*לאחר[^\n.]*",
+        r"שנה\s*לאחר[^\n.]*",
+    ]
+    for pat in no_leading_digit:
+        m = re.search(pat, g)
+        if m:
+            return m.group(0).strip().rstrip(".,")
+
     patterns = [
         r"\d+\s*שנים?\s*לאחר",
         r"\d+\s*שנה\s*לאחר",
@@ -64,6 +81,22 @@ def extract_wait_time(g: str) -> str | None:
         return "24 שעות"
     if "12 שעות" in g:
         return "12 שעות"
+
+    # Fallback: explicit end-of-treatment / recovery phrases (deferral without numeric prefix)
+    # MDA sometimes writes "לאחר סיום טיפול" (no ה) vs "לאחר סיום הטיפול"
+    m_end_treatment = re.search(r"[^\n.]*לאחר סיום ה?טיפול[^\n.]*", g)
+    if m_end_treatment:
+        return m_end_treatment.group(0).strip().rstrip(".,")
+    if "לאחר סיום הקורס" in g:
+        m = re.search(r"[^\n.]*לאחר סיום הקורס[^\n.]*", g)
+        if m:
+            return m.group(0).strip().rstrip(".,")
+        return "לאחר סיום הקורס"
+    if "לאחר החלמה" in g:
+        m = re.search(r"[^\n.]*לאחר החלמה[^\n.]*", g)
+        if m:
+            return m.group(0).strip().rstrip(".,")
+
     return None
 
 

@@ -8,6 +8,7 @@ import {
   firstMedicationHitForCandidateStrings,
   type Medication,
 } from '../data/medications';
+import { indicationToMedicationIssue } from '../data/medicationIssueHelpers';
 import type { Country } from '../data/countries';
 import {
   searchCountry,
@@ -252,9 +253,19 @@ export function useChatFlow() {
 
       setFinalStatus(status);
       if (sessionIdRef.current) {
+        const issuesPayload = issues.map((i) => ({
+          type: i.type,
+          reason: i.reason,
+          waitTime: i.waitTime,
+          summaryLine: i.summaryLine,
+        }));
         await updateSession(sessionIdRef.current, {
           final_status: status,
-          answers_log: currentAnswers as Record<string, unknown>,
+          answers_log: {
+            ...currentAnswers,
+            computed_issues: issuesPayload,
+            eligibility_summary_text: summary,
+          } as Record<string, unknown>,
         });
       }
 
@@ -405,15 +416,8 @@ export function useChatFlow() {
         const ind = med.indications[0];
         updateAnswers({ medicationIndication: ind.reason, medicationAction: ind.action });
 
-        if (ind.action === 'פסילה קבועה') {
-          addIssue({ type: 'פסילה קבועה', reason: `תרופה: ${med.name} — ${ind.reason}` });
-        } else if (ind.action === 'פסילה זמנית') {
-          addIssue({ type: 'פסילה זמנית', reason: `תרופה: ${med.name}`, waitTime: ind.waitTime });
-        } else if (ind.action === 'בירור רפואי') {
-          addIssue({ type: 'בירור רפואי', reason: `תרופה: ${med.name} — ${ind.reason}` });
-        } else if (ind.action === 'זכאות מלאה' && ind.waitTime?.trim()) {
-          addIssue({ type: 'פסילה זמנית', reason: `תרופה: ${med.name} — ${ind.reason}`, waitTime: ind.waitTime });
-        }
+        const issue = indicationToMedicationIssue(med.name, ind);
+        if (issue) addIssue(issue);
 
         await processNextMedication(updatedAnswers);
       } else {
@@ -435,19 +439,8 @@ export function useChatFlow() {
       if (med.indications.length === 1) {
         const ind = med.indications[0];
         updateAnswers({ medicationIndication: ind.reason, medicationAction: ind.action });
-        if (ind.action === 'פסילה קבועה') {
-          addIssue({ type: 'פסילה קבועה', reason: `תרופה: ${med.name} — ${ind.reason}` });
-        } else if (ind.action === 'פסילה זמנית') {
-          addIssue({ type: 'פסילה זמנית', reason: `תרופה: ${med.name}`, waitTime: ind.waitTime });
-        } else if (ind.action === 'בירור רפואי') {
-          addIssue({ type: 'בירור רפואי', reason: `תרופה: ${med.name} — ${ind.reason}` });
-        } else if (ind.action === 'זכאות מלאה' && ind.waitTime?.trim()) {
-          addIssue({
-            type: 'פסילה זמנית',
-            reason: `תרופה: ${med.name} — ${ind.reason}`,
-            waitTime: ind.waitTime,
-          });
-        }
+        const issueFromSearch = indicationToMedicationIssue(med.name, ind);
+        if (issueFromSearch) addIssue(issueFromSearch);
         await processNextMedication(updatedAnswers);
       } else {
         setPendingMedication(med);
@@ -701,19 +694,8 @@ export function useChatFlow() {
 
           updateAnswers({ medicationIndication: indication.reason, medicationAction: indication.action });
 
-          if (indication.action === 'פסילה קבועה') {
-            addIssue({ type: 'פסילה קבועה', reason: `תרופה: ${pendingMedication.name} — ${indication.reason}` });
-          } else if (indication.action === 'פסילה זמנית') {
-            addIssue({ type: 'פסילה זמנית', reason: `תרופה: ${pendingMedication.name}`, waitTime: indication.waitTime });
-          } else if (indication.action === 'בירור רפואי') {
-            addIssue({ type: 'בירור רפואי', reason: `תרופה: ${pendingMedication.name} — ${indication.reason}` });
-          } else if (indication.action === 'זכאות מלאה' && indication.waitTime?.trim()) {
-            addIssue({
-              type: 'פסילה זמנית',
-              reason: `תרופה: ${pendingMedication.name} — ${indication.reason}`,
-              waitTime: indication.waitTime,
-            });
-          }
+          const issuePick = indicationToMedicationIssue(pendingMedication.name, indication);
+          if (issuePick) addIssue(issuePick);
           setPendingMedication(null);
           // Advance the medication queue
           await processNextMedication(answersRef.current);

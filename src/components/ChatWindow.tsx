@@ -372,6 +372,12 @@ export const ChatWindow: React.FC = () => {
           onFeedbackText={(t) => {
             void handleSessionFeedback({ feedbackText: t });
           }}
+          onSubmitFeedback={(data) => {
+            void handleSessionFeedback({
+              rating: data.rating ?? undefined,
+              feedbackText: data.feedbackText.trim() || undefined,
+            });
+          }}
           onRestart={handleRestart}
           disabled={isInteractionDisabled}
         />
